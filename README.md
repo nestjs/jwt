@@ -40,7 +40,7 @@ $ npm i --save @nestjs/jwt
 
 ```typescript
 @Module({
-  imports: [JwtModule.forRoot({ secretOrPrivateKey: 'key' })],
+  imports: [JwtModule.register({ secretOrPrivateKey: 'key' })],
   providers: [...],
 })
 export class AuthModule {}
