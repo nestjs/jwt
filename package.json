@@ -1,11 +1,11 @@
 {
   "name": "@nestjs/jwt",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Nest - modern, fast, powerful node.js web framework (@jwt)",
   "author": "Kamil Mysliwiec",
   "license": "MIT",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "rm -rf dist && tsc -p tsconfig.json",
     "precommit": "lint-staged",
     "prepublish:npm": "npm run build",
     "publish:npm": "npm publish --access public"
