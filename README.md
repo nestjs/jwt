@@ -89,7 +89,7 @@ JwtModule.registerAsync({
 Above construction will instantiate `JwtConfigService` inside `JwtModule` and will leverage it to create options object.
 ```typescript
 class JwtConfigService implements JwtOptionsFactory {
-  createMongooseOptions(): JwtModuleOptions {
+  createJwtOptions(): JwtModuleOptions {
     return {
       secretOrPrivateKey: 'key',
     };
