@@ -36,11 +36,43 @@ $ npm i --save @nestjs/jwt
 
 ## Usage
 
-TBC
+1. Import `JwtModule`:
+
+```typescript
+@Module({
+  imports: [JwtModule.register({ secretOrPrivateKey: 'key' })],
+  providers: [...],
+})
+export class AuthModule {}
+```
+
+2. Inject `JwtService`:
+
+```typescript
+@Injectable()
+export class AuthService {
+  constructor(private readonly jwtService: JwtService) {}
+}
+```
 
 ## API Spec
 
-TBC
+The `JwtService` uses [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) underneath.
+
+#### jwtService.sign(payload: string | Object | Buffer): string
+The sign method is an implementation of jsonwebtoken `.sign()`.
+
+#### jwtService.verify\<T extends object = any>(token: string): T
+The sign method is an implementation of jsonwebtoken `.verify()`.
+
+#### jwtService.decode(token: string, options: DecodeOptions): object | string
+The sign method is an implementation of jsonwebtoken `.decode()`.
+
+The `JwtModule` takes an `options` object:
+- `secretOrPrivateKey` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
+- `signOptions` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
+- `publicKey` PEM encoded public key for RSA and ECDSA
+- `verifyOptions` [read more](https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback)
 
 ## Support
 
