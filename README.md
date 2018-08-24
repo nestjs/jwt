@@ -55,6 +55,58 @@ export class AuthService {
 }
 ```
 
+## Async options
+
+Quite often you might want to asynchronously pass your module options instead of passing them beforehand. In such case, use `registerAsync()` method, that provides a couple of various ways to deal with async data.
+
+
+**Use factory**
+```typescript
+JwtModule.registerAsync({
+  useFactory: () => ({
+    secretOrPrivateKey: 'key',
+  }),
+})
+```
+Obviously, our factory behaves like every other one (might be `async` and is able to inject dependencies through `inject`).
+
+```typescript
+JwtModule.registerAsync({
+  imports: [ConfigModule],
+  useFactory: async (configService: ConfigService) => ({
+    secretOrPrivateKey: configService.getString('SECRET_KEY'),
+  }),
+  inject: [ConfigService],
+}),
+```
+
+**Use class**
+```typescript
+JwtModule.registerAsync({
+  useClass: JwtConfigService,
+})
+```
+Above construction will instantiate `JwtConfigService` inside `JwtModule` and will leverage it to create options object.
+```typescript
+class JwtConfigService implements JwtOptionsFactory {
+  createMongooseOptions(): JwtModuleOptions {
+    return {
+      secretOrPrivateKey: 'key',
+    };
+  }
+}
+```
+
+**Use existing**
+```typescript
+JwtModule.registerAsync({
+  imports: [ConfigModule],
+  useExisting: ConfigService,
+}),
+```
+It works the same as `useClass` with one critical difference - `JwtModule` will lookup imported modules to reuse already created `ConfigService`, instead of instantiating it on its own.
+
+
 ## API Spec
 
 The `JwtService` uses [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) underneath.
