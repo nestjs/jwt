@@ -36,7 +36,7 @@ $ npm i --save @nestjs/jwt
 
 ## Usage
 
-1. Import `JwtModule`:
+Import `JwtModule`:
 
 ```typescript
 @Module({
@@ -46,7 +46,7 @@ $ npm i --save @nestjs/jwt
 export class AuthModule {}
 ```
 
-2. Inject `JwtService`:
+Inject `JwtService`:
 
 ```typescript
 @Injectable()
@@ -54,6 +54,58 @@ export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 }
 ```
+
+## Async options
+
+Quite often you might want to asynchronously pass your module options instead of passing them beforehand. In such case, use `registerAsync()` method, that provides a couple of various ways to deal with async data.
+
+
+**1. Use factory**
+```typescript
+JwtModule.registerAsync({
+  useFactory: () => ({
+    secretOrPrivateKey: 'key',
+  }),
+})
+```
+Obviously, our factory behaves like every other one (might be `async` and is able to inject dependencies through `inject`).
+
+```typescript
+JwtModule.registerAsync({
+  imports: [ConfigModule],
+  useFactory: async (configService: ConfigService) => ({
+    secretOrPrivateKey: configService.getString('SECRET_KEY'),
+  }),
+  inject: [ConfigService],
+}),
+```
+
+**2. Use class**
+```typescript
+JwtModule.registerAsync({
+  useClass: JwtConfigService,
+})
+```
+Above construction will instantiate `JwtConfigService` inside `JwtModule` and will leverage it to create options object.
+```typescript
+class JwtConfigService implements JwtOptionsFactory {
+  createJwtOptions(): JwtModuleOptions {
+    return {
+      secretOrPrivateKey: 'key',
+    };
+  }
+}
+```
+
+**3. Use existing**
+```typescript
+JwtModule.registerAsync({
+  imports: [ConfigModule],
+  useExisting: ConfigService,
+}),
+```
+It works the same as `useClass` with one critical difference - `JwtModule` will lookup imported modules to reuse already created `ConfigService`, instead of instantiating it on its own.
+
 
 ## API Spec
 
