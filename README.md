@@ -59,7 +59,6 @@ export class AuthService {
 
 Quite often you might want to asynchronously pass your module options instead of passing them beforehand. In such case, use `registerAsync()` method, that provides a couple of various ways to deal with async data.
 
-
 **1. Use factory**
 ```typescript
 JwtModule.registerAsync({
@@ -105,7 +104,6 @@ JwtModule.registerAsync({
 }),
 ```
 It works the same as `useClass` with one critical difference - `JwtModule` will lookup imported modules to reuse already created `ConfigService`, instead of instantiating it on its own.
-
 
 ## API Spec
 
