@@ -36,7 +36,7 @@ $ npm i --save @nestjs/jwt
 
 ## Usage
 
-1. Import `JwtModule`:
+Import `JwtModule`:
 
 ```typescript
 @Module({
@@ -46,7 +46,7 @@ $ npm i --save @nestjs/jwt
 export class AuthModule {}
 ```
 
-2. Inject `JwtService`:
+Inject `JwtService`:
 
 ```typescript
 @Injectable()
@@ -60,7 +60,7 @@ export class AuthService {
 Quite often you might want to asynchronously pass your module options instead of passing them beforehand. In such case, use `registerAsync()` method, that provides a couple of various ways to deal with async data.
 
 
-**Use factory**
+**1. Use factory**
 ```typescript
 JwtModule.registerAsync({
   useFactory: () => ({
@@ -80,7 +80,7 @@ JwtModule.registerAsync({
 }),
 ```
 
-**Use class**
+**2. Use class**
 ```typescript
 JwtModule.registerAsync({
   useClass: JwtConfigService,
@@ -97,7 +97,7 @@ class JwtConfigService implements JwtOptionsFactory {
 }
 ```
 
-**Use existing**
+**3. Use existing**
 ```typescript
 JwtModule.registerAsync({
   imports: [ConfigModule],
