@@ -23,6 +23,7 @@ export class JwtModule {
   static registerAsync(options: JwtModuleAsyncOptions): DynamicModule {
     return {
       module: JwtModule,
+      imports: options.imports || [],
       providers: this.createAsyncProviders(options)
     };
   }
