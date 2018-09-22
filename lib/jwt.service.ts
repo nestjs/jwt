@@ -12,7 +12,7 @@ export class JwtService {
   sign(payload: string | Object | Buffer, options?: jwt.SignOptions): string {
     const signOptions = options
       ? {
-          ...this.options.signOptions,
+          ...(this.options.signOptions || {}),
           ...options
         }
       : this.options.signOptions;
@@ -25,7 +25,7 @@ export class JwtService {
   ): T {
     const verifyOptions = options
       ? {
-          ...this.options.verifyOptions,
+          ...(this.options.verifyOptions || {}),
           ...options
         }
       : this.options.verifyOptions;
