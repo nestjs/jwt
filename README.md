@@ -59,7 +59,6 @@ export class AuthService {
 
 Quite often you might want to asynchronously pass your module options instead of passing them beforehand. In such case, use `registerAsync()` method, that provides a couple of various ways to deal with async data.
 
-
 **1. Use factory**
 ```typescript
 JwtModule.registerAsync({
@@ -106,15 +105,14 @@ JwtModule.registerAsync({
 ```
 It works the same as `useClass` with one critical difference - `JwtModule` will lookup imported modules to reuse already created `ConfigService`, instead of instantiating it on its own.
 
-
 ## API Spec
 
 The `JwtService` uses [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) underneath.
 
-#### jwtService.sign(payload: string | Object | Buffer): string
+#### jwtService.sign(payload: string | Object | Buffer, options?: SignOptions): string
 The sign method is an implementation of jsonwebtoken `.sign()`.
 
-#### jwtService.verify\<T extends object = any>(token: string): T
+#### jwtService.verify\<T extends object = any>(token: string, options?: VerifyOptions): T
 The sign method is an implementation of jsonwebtoken `.verify()`.
 
 #### jwtService.decode(token: string, options: DecodeOptions): object | string
