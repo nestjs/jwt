@@ -109,10 +109,10 @@ It works the same as `useClass` with one critical difference - `JwtModule` will 
 
 The `JwtService` uses [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) underneath.
 
-#### jwtService.sign(payload: string | Object | Buffer): string
+#### jwtService.sign(payload: string | Object | Buffer, options?: SignOptions): string
 The sign method is an implementation of jsonwebtoken `.sign()`.
 
-#### jwtService.verify\<T extends object = any>(token: string): T
+#### jwtService.verify\<T extends object = any>(token: string, options?: VerifyOptions): T
 The sign method is an implementation of jsonwebtoken `.verify()`.
 
 #### jwtService.decode(token: string, options: DecodeOptions): object | string
