@@ -22,18 +22,24 @@ export class JwtService {
   verify<T extends object = any>(
     token: string,
     options?: jwt.VerifyOptions
-  ): T {
+  ): void {
     const verifyOptions = options
       ? {
           ...(this.options.verifyOptions || {}),
           ...options
         }
       : this.options.verifyOptions;
-    return jwt.verify(
+     return jwt.verify(
       token,
       this.options.publicKey || (this.options.secretOrPrivateKey as any),
-      verifyOptions
-    ) as T;
+      verifyOptions,
+      (error, jwtPayload) => {
+        if (error) {
+          throw error
+        }
+        return jwtPayload
+      }
+    );
   }
 
   decode(
