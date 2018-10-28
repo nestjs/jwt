@@ -112,16 +112,16 @@ The `JwtService` uses [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
 #### jwtService.sign(payload: string | Object | Buffer, options?: SignOptions): string
 The sign method is an implementation of jsonwebtoken `.sign()`.
 
-#### jwtService.verify\<T extends object = any>(token: string, options?: VerifyOptions): T
-The sign method is an implementation of jsonwebtoken `.verify()`.
+#### jwtService.verify\<T extends object = any>(token: string, options?: VerifyOptions): void
+The verify method is an implementation of jsonwebtoken `.verify()`.
 
 #### jwtService.decode(token: string, options: DecodeOptions): object | string
-The sign method is an implementation of jsonwebtoken `.decode()`.
+The decode method is an implementation of jsonwebtoken `.decode()`.
 
 The `JwtModule` takes an `options` object:
 - `secretOrPrivateKey` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
 - `signOptions` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
-- `publicKey` PEM encoded public key for RSA and ECDSA
+- `publicKey` PEM encoded public key for RSA and ECDSA [read more](https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback)
 - `verifyOptions` [read more](https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback)
 
 ## Support
