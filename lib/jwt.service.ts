@@ -35,9 +35,9 @@ export class JwtService {
       verifyOptions,
       (error, jwtPayload) => {
         if (error) {
-          throw error
+          throw error;
         }
-        return jwtPayload
+        return jwtPayload;
       }
     );
   }
