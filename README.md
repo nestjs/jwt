@@ -60,13 +60,15 @@ export class AuthService {
 Quite often you might want to asynchronously pass your module options instead of passing them beforehand. In such case, use `registerAsync()` method, that provides a couple of various ways to deal with async data.
 
 **1. Use factory**
+
 ```typescript
 JwtModule.registerAsync({
   useFactory: () => ({
-    secretOrPrivateKey: 'key',
-  }),
-})
+    secretOrPrivateKey: 'key'
+  })
+});
 ```
+
 Obviously, our factory behaves like every other one (might be `async` and is able to inject dependencies through `inject`).
 
 ```typescript
@@ -80,29 +82,34 @@ JwtModule.registerAsync({
 ```
 
 **2. Use class**
+
 ```typescript
 JwtModule.registerAsync({
-  useClass: JwtConfigService,
-})
+  useClass: JwtConfigService
+});
 ```
+
 Above construction will instantiate `JwtConfigService` inside `JwtModule` and will leverage it to create options object.
+
 ```typescript
 class JwtConfigService implements JwtOptionsFactory {
   createJwtOptions(): JwtModuleOptions {
     return {
-      secretOrPrivateKey: 'key',
+      secretOrPrivateKey: 'key'
     };
   }
 }
 ```
 
 **3. Use existing**
+
 ```typescript
 JwtModule.registerAsync({
   imports: [ConfigModule],
   useExisting: ConfigService,
 }),
 ```
+
 It works the same as `useClass` with one critical difference - `JwtModule` will lookup imported modules to reuse already created `ConfigService`, instead of instantiating it on its own.
 
 ## API Spec
@@ -110,15 +117,19 @@ It works the same as `useClass` with one critical difference - `JwtModule` will 
 The `JwtService` uses [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) underneath.
 
 #### jwtService.sign(payload: string | Object | Buffer, options?: SignOptions): string
+
 The sign method is an implementation of jsonwebtoken `.sign()`.
 
 #### jwtService.verify\<T extends object = any>(token: string, options?: VerifyOptions): T
-The sign method is an implementation of jsonwebtoken `.verify()`.
+
+The verify method is an implementation of jsonwebtoken `.verify()`.
 
 #### jwtService.decode(token: string, options: DecodeOptions): object | string
-The sign method is an implementation of jsonwebtoken `.decode()`.
+
+The decode method is an implementation of jsonwebtoken `.decode()`.
 
 The `JwtModule` takes an `options` object:
+
 - `secretOrPrivateKey` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
 - `signOptions` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
 - `publicKey` PEM encoded public key for RSA and ECDSA
@@ -130,9 +141,9 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-* Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-* Website - [https://nestjs.com](https://nestjs.com/)
-* Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
