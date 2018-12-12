@@ -38,7 +38,7 @@ export class JwtService {
 
   decode(
     token: string,
-    options: jwt.DecodeOptions
+    options?: jwt.DecodeOptions
   ): null | { [key: string]: any } | string {
     return jwt.decode(token, options);
   }
