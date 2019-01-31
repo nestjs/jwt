@@ -120,9 +120,17 @@ The `JwtService` uses [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
 
 The sign method is an implementation of jsonwebtoken `.sign()`.
 
+#### jwtService.signAsync(payload: string | Object | Buffer, options?: SignOptions): Promise<string>
+
+The asynchronous `.sign()` method.
+
 #### jwtService.verify\<T extends object = any>(token: string, options?: VerifyOptions): T
 
 The verify method is an implementation of jsonwebtoken `.verify()`.
+
+#### jwtService.verifyAsync\<T extends object = any>(token: string, options?: VerifyOptions): Promise<T>
+
+The asynchronous `.verify()` method.
 
 #### jwtService.decode(token: string, options: DecodeOptions): object | string
 

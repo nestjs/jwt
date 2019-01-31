@@ -19,6 +19,26 @@ export class JwtService {
     return jwt.sign(payload, this.options.secretOrPrivateKey, signOptions);
   }
 
+  signAsync(
+    payload: string | Object | Buffer,
+    options?: jwt.SignOptions
+  ): Promise<string> {
+    const signOptions = options
+      ? {
+          ...(this.options.signOptions || {}),
+          ...options
+        }
+      : this.options.signOptions;
+    return new Promise((resolve, reject) =>
+      jwt.sign(
+        payload,
+        this.options.secretOrPrivateKey,
+        signOptions,
+        (err, encoded) => (err ? reject(err) : resolve(encoded))
+      )
+    );
+  }
+
   verify<T extends object = any>(
     token: string,
     options?: jwt.VerifyOptions
@@ -34,6 +54,26 @@ export class JwtService {
       this.options.publicKey || (this.options.secretOrPrivateKey as any),
       verifyOptions
     ) as T;
+  }
+
+  verifyAsync<T extends object = any>(
+    token: string,
+    options?: jwt.VerifyOptions
+  ): Promise<T> {
+    const verifyOptions = options
+      ? {
+          ...(this.options.verifyOptions || {}),
+          ...options
+        }
+      : this.options.verifyOptions;
+    return new Promise((resolve, reject) =>
+      jwt.verify(
+        token,
+        this.options.publicKey || (this.options.secretOrPrivateKey as any),
+        verifyOptions,
+        (err, decoded) => (err ? reject(err) : resolve(decoded as T))
+      )
+    ) as Promise<T>;
   }
 
   decode(
