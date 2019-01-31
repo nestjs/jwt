@@ -14,12 +14,12 @@
     "@nestjs/common": "^5.0.0"
   },
   "devDependencies": {
-    "@nestjs/common": "^5.0.1",
-    "@types/node": "^7.0.41",
-    "husky": "^0.14.3",
-    "lint-staged": "^7.0.0",
-    "prettier": "^1.11.1",
-    "typescript": "^2.4.2"
+    "@nestjs/common": "5.6.2",
+    "@types/node": "7.10.2",
+    "husky": "0.14.3",
+    "lint-staged": "7.3.0",
+    "prettier": "1.16.3",
+    "typescript": "2.9.2"
   },
   "lint-staged": {
     "*.ts": [
@@ -28,7 +28,7 @@
     ]
   },
   "dependencies": {
-    "@types/jsonwebtoken": "^7.2.7",
-    "jsonwebtoken": "^8.3.0"
+    "@types/jsonwebtoken": "7.2.8",
+    "jsonwebtoken": "8.4.0"
   }
 }
