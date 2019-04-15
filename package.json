@@ -28,7 +28,7 @@
     "reflect-metadata": "^0.1.13",
     "ts-jest": "^24.0.1",
     "prettier": "1.17.0",
-    "typescript": "3.4.2"
+    "typescript": "3.4.3"
   },
   "lint-staged": {
     "*.ts": [
