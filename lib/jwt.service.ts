@@ -1,6 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
-import { JwtModuleOptions } from './interfaces/jwt-module-options.interface';
+import {
+  JwtModuleOptions,
+  JwtSecretRequestType
+} from './interfaces/jwt-module-options.interface';
 import { JWT_MODULE_OPTIONS } from './jwt.constants';
 
 @Injectable()
@@ -9,18 +12,35 @@ export class JwtService {
     @Inject(JWT_MODULE_OPTIONS) private readonly options: JwtModuleOptions
   ) {}
 
-  sign(payload: string | Object | Buffer, options?: jwt.SignOptions): string {
+  sign(payload: string | Buffer | object, options?: jwt.SignOptions): string {
     const signOptions = options
       ? {
           ...(this.options.signOptions || {}),
           ...options
         }
       : this.options.signOptions;
-    return jwt.sign(payload, this.options.secretOrPrivateKey, signOptions);
+
+    let secret = this.options.secretOrKeyProvider
+      ? this.options.secretOrKeyProvider(
+          JwtSecretRequestType.SIGN,
+          payload,
+          signOptions
+        )
+      : this.options.secret || this.options.privateKey;
+
+    if (this.options.secretOrPrivateKey) {
+      console.warn(
+        "WARNING! 'secretOrPrivateKey' has been deprecated, please use the ",
+        "new explicit 'secretOrKeyProvider' or use 'privateKey'/'publicKey' exclusively"
+      );
+      secret = this.options.secretOrPrivateKey;
+    }
+
+    return jwt.sign(payload, secret, signOptions);
   }
 
   signAsync(
-    payload: string | Object | Buffer,
+    payload: string | Buffer | object,
     options?: jwt.SignOptions
   ): Promise<string> {
     const signOptions = options
@@ -29,12 +49,26 @@ export class JwtService {
           ...options
         }
       : this.options.signOptions;
+
+    let secret = this.options.secretOrKeyProvider
+      ? this.options.secretOrKeyProvider(
+          JwtSecretRequestType.SIGN,
+          payload,
+          signOptions
+        )
+      : this.options.secret || this.options.privateKey;
+
+    if (this.options.secretOrPrivateKey) {
+      console.warn(
+        "WARNING! 'secretOrPrivateKey' has been deprecated, please use the ",
+        "new explicit 'secretOrKeyProvider' or use 'privateKey'/'publicKey' exclusively"
+      );
+      secret = this.options.secretOrPrivateKey;
+    }
+
     return new Promise((resolve, reject) =>
-      jwt.sign(
-        payload,
-        this.options.secretOrPrivateKey,
-        signOptions,
-        (err, encoded) => (err ? reject(err) : resolve(encoded))
+      jwt.sign(payload, secret, signOptions, (err, encoded) =>
+        err ? reject(err) : resolve(encoded)
       )
     );
   }
@@ -49,11 +83,24 @@ export class JwtService {
           ...options
         }
       : this.options.verifyOptions;
-    return jwt.verify(
-      token,
-      this.options.publicKey || (this.options.secretOrPrivateKey as any),
-      verifyOptions
-    ) as T;
+
+    let secret = this.options.secretOrKeyProvider
+      ? this.options.secretOrKeyProvider(
+          JwtSecretRequestType.VERIFY,
+          token,
+          verifyOptions
+        )
+      : this.options.secret || this.options.publicKey;
+
+    if (this.options.secretOrPrivateKey) {
+      console.warn(
+        "WARNING! 'secretOrPrivateKey' has been deprecated, please use the ",
+        "new explicit 'secretOrKeyProvider' or use 'privateKey'/'publicKey' exclusively"
+      );
+      secret = this.options.publicKey;
+    }
+
+    return jwt.verify(token, secret.toString(), verifyOptions) as T;
   }
 
   verifyAsync<T extends object = any>(
@@ -66,12 +113,26 @@ export class JwtService {
           ...options
         }
       : this.options.verifyOptions;
+
+    let secret = this.options.secretOrKeyProvider
+      ? this.options.secretOrKeyProvider(
+          JwtSecretRequestType.VERIFY,
+          token,
+          verifyOptions
+        )
+      : this.options.secret || this.options.publicKey;
+
+    if (this.options.secretOrPrivateKey) {
+      console.warn(
+        "WARNING! 'secretOrPrivateKey' has been deprecated, please use the ",
+        "new explicit 'secretOrKeyProvider' or use 'privateKey'/'publicKey' exclusively"
+      );
+      secret = this.options.publicKey;
+    }
+
     return new Promise((resolve, reject) =>
-      jwt.verify(
-        token,
-        this.options.publicKey || (this.options.secretOrPrivateKey as any),
-        verifyOptions,
-        (err, decoded) => (err ? reject(err) : resolve(decoded as T))
+      jwt.verify(token, secret.toString(), verifyOptions, (err, decoded) =>
+        err ? reject(err) : resolve(decoded as T)
       )
     ) as Promise<T>;
   }
