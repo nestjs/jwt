@@ -173,12 +173,13 @@ The decode method is an implementation of jsonwebtoken `.decode()`.
 
 The `JwtModule` takes an `options` object:
 
-- `secretOrPrivateKey` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
-- `secretOrPublicKey` [read more](https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback)
-- `secretOrKeyProvider` [read more](https://github.com/themikenicholson/passport-jwt/blob/master/README.md#configure-strategy)
+- `secret` is either a string, buffer, or object containing the secret for HMAC algorithms
+- `secretOrKeyProvider` function with the following signature `(requestType, tokenOrPayload, options?) => jwt.Secret` (allows generating either secrets or keys dynamically)
 - `signOptions` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
+- `privateKey` PEM encoded private key for RSA and ECDSA with passphrase an object `{ key, passphrase }` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
 - `publicKey` PEM encoded public key for RSA and ECDSA
 - `verifyOptions` [read more](https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback)
+- `secretOrPrivateKey` (DEPRECATED!) [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
 
 ## Support
 

@@ -1,12 +1,11 @@
 import { Test } from '@nestjs/testing';
-import { JwtModule } from './jwt.module';
-import { JwtService } from './jwt.service';
-
 import * as jwt from 'jsonwebtoken';
 import {
-  JwtSecretRequestType,
-  JwtModuleOptions
+  JwtModuleOptions,
+  JwtSecretRequestType
 } from './interfaces/jwt-module-options.interface';
+import { JwtModule } from './jwt.module';
+import { JwtService } from './jwt.service';
 
 const setup = async (config: JwtModuleOptions) => {
   const module = await Test.createTestingModule({
@@ -139,12 +138,12 @@ describe('JWT Service', () => {
     });
 
     it('verifying should use deprecated secretOrPrivateKey', async () => {
-      expect(await jwtService.verify('random')).toBe(config.publicKey);
+      expect(await jwtService.verify('random')).toBe('deprecated');
       expect(consoleCheck).toHaveBeenCalledTimes(1);
     });
 
     it('verifying (async) should use deprecated secretOrPrivateKey', async () => {
-      expect(jwtService.verifyAsync('random')).resolves.toBe(config.publicKey);
+      expect(jwtService.verifyAsync('random')).resolves.toBe('deprecated');
       expect(consoleCheck).toHaveBeenCalledTimes(1);
     });
 
