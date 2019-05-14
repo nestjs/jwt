@@ -5,12 +5,16 @@ export enum JwtSecretRequestType {
   SIGN,
   VERIFY
 }
+
 export interface JwtModuleOptions {
   signOptions?: jwt.SignOptions;
   secret?: string | Buffer;
   publicKey?: string | Buffer;
   privateKey?: jwt.Secret;
-  secretOrPrivateKey?: jwt.Secret; // TODO: deprecated
+  /**
+   * @deprecated
+   */
+  secretOrPrivateKey?: jwt.Secret;
   secretOrKeyProvider?: (
     requestType: JwtSecretRequestType,
     tokenOrPayload: string | object | Buffer,
