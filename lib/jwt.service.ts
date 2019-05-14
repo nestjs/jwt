@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import {
   JwtModuleOptions,
@@ -8,6 +8,8 @@ import { JWT_MODULE_OPTIONS } from './jwt.constants';
 
 @Injectable()
 export class JwtService {
+  private readonly logger = new Logger('JwtService');
+
   constructor(
     @Inject(JWT_MODULE_OPTIONS) private readonly options: JwtModuleOptions
   ) {}
@@ -113,9 +115,8 @@ export class JwtService {
       : this.options.secret || this.options[key];
 
     if (this.options.secretOrPrivateKey) {
-      console.warn(
-        "WARNING! 'secretOrPrivateKey' has been deprecated, please use the ",
-        "new explicit 'secretOrKeyProvider' or use 'privateKey'/'publicKey' exclusively"
+      this.logger.warn(
+        `"secretOrPrivateKey" has been deprecated, please use the new explicit "secretOrKeyProvider" or use "privateKey"/"publicKey" exclusively.`
       );
       secret = this.options.secretOrPrivateKey;
     }

@@ -124,7 +124,7 @@ describe('JWT Service', () => {
 
     beforeAll(async () => {
       jwtService = await setup({ ...config, secretOrPrivateKey: 'deprecated' });
-      consoleCheck = jest.spyOn(console, 'warn').mockImplementation(() => null);
+      consoleCheck = jest.spyOn(jwtService['logger'], 'warn');
     });
 
     it('signing should use deprecated secretOrPrivateKey', async () => {
