@@ -40,7 +40,7 @@ Import `JwtModule`:
 
 ```typescript
 @Module({
-  imports: [JwtModule.register({ secretOrPrivateKey: 'key' })],
+  imports: [JwtModule.register({ secret: 'hard!to-guess_secret' })],
   providers: [...],
 })
 export class AuthModule {}
@@ -55,6 +55,41 @@ export class AuthService {
 }
 ```
 
+## Secret / Encryption Key options
+
+If you want to control secret and key management dynamically you can use the `secretOrKeyProvider` function for that purpose.
+
+```typescript
+JwtModule.register({
+  /* Dynamic key provider has precedance over static secret or pub/private keys */
+  secretOrKeyProvider: (
+    requestType: JwtSecretRequestType,
+    tokenOrPayload: string | Object | Buffer,
+    verifyOrSignOrOptions?: jwt.VerifyOptions | jwt.SignOptions
+  ) => {
+    switch (requestType) {
+      case JwtSecretRequestType.SIGN:
+        // retrieve signing key dynamically
+        return 'privateKey';
+      case JwtSecretRequestType.VERIFY:
+        // retrieve public key for verification dynamically
+        return 'publicKey';
+      default:
+        // retrieve secret dynamically
+        return 'hard!to-guess_secret';
+    }
+  },
+  /* Secret has precedance over keys */
+  secret: 'hard!to-guess_secret',
+
+  /* public key used in asymmetric algorithms (required if non other secrets present) */
+  publicKey: '...',
+
+  /* private key used in asymmetric algorithms (required if non other secrets present) */
+  privateKey: '...'
+});
+```
+
 ## Async options
 
 Quite often you might want to asynchronously pass your module options instead of passing them beforehand. In such case, use `registerAsync()` method, that provides a couple of various ways to deal with async data.
@@ -64,7 +99,7 @@ Quite often you might want to asynchronously pass your module options instead of
 ```typescript
 JwtModule.registerAsync({
   useFactory: () => ({
-    secretOrPrivateKey: 'key'
+    secret: 'hard!to-guess_secret'
   })
 });
 ```
@@ -75,7 +110,7 @@ Obviously, our factory behaves like every other one (might be `async` and is abl
 JwtModule.registerAsync({
   imports: [ConfigModule],
   useFactory: async (configService: ConfigService) => ({
-    secretOrPrivateKey: configService.getString('SECRET_KEY'),
+    secret: configService.getString('SECRET'),
   }),
   inject: [ConfigService],
 }),
@@ -95,7 +130,7 @@ Above construction will instantiate `JwtConfigService` inside `JwtModule` and wi
 class JwtConfigService implements JwtOptionsFactory {
   createJwtOptions(): JwtModuleOptions {
     return {
-      secretOrPrivateKey: 'key'
+      secret: 'hard!to-guess_secret'
     };
   }
 }
@@ -138,10 +173,13 @@ The decode method is an implementation of jsonwebtoken `.decode()`.
 
 The `JwtModule` takes an `options` object:
 
-- `secretOrPrivateKey` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
+- `secret` is either a string, buffer, or object containing the secret for HMAC algorithms
+- `secretOrKeyProvider` function with the following signature `(requestType, tokenOrPayload, options?) => jwt.Secret` (allows generating either secrets or keys dynamically)
 - `signOptions` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
+- `privateKey` PEM encoded private key for RSA and ECDSA with passphrase an object `{ key, passphrase }` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
 - `publicKey` PEM encoded public key for RSA and ECDSA
 - `verifyOptions` [read more](https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback)
+- `secretOrPrivateKey` (DEPRECATED!) [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
 
 ## Support
 

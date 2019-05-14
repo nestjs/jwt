@@ -5,6 +5,9 @@
   "author": "Kamil Mysliwiec",
   "license": "MIT",
   "scripts": {
+    "test": "jest --config=jest.json",
+    "test:watch": "jest --config=jest.json --watch",
+    "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
     "build": "rm -rf dist && tsc -p tsconfig.json",
     "precommit": "lint-staged",
     "prepublish:npm": "npm run build",
@@ -14,12 +17,18 @@
     "@nestjs/common": "^6.0.0"
   },
   "devDependencies": {
-    "@nestjs/common": "6.0.0",
+    "jest": "^24.5.0",
+    "ts-jest": "^24.0.1",
+    "reflect-metadata": "^0.1.13",
+    "@nestjs/core": "6.1.1",
+    "@nestjs/testing": "6.1.1",
+    "@types/jest": "^24.0.11",
+    "@nestjs/common": "6.1.1",
     "@types/node": "7.10.5",
     "husky": "0.14.3",
     "lint-staged": "8.1.5",
-    "prettier": "1.16.4",
-    "typescript": "3.3.3333"
+    "prettier": "1.17.0",
+    "typescript": "3.4.5"
   },
   "lint-staged": {
     "*.ts": [
