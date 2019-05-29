@@ -116,7 +116,7 @@ export class JwtService {
 
     if (this.options.secretOrPrivateKey) {
       this.logger.warn(
-        `"secretOrPrivateKey" has been deprecated, please use the new explicit "secretOrKeyProvider" or use "privateKey"/"publicKey" exclusively.`
+        `"secretOrPrivateKey" has been deprecated, please use the new explicit "secret" or use "secretOrKeyProvider" or "privateKey"/"publicKey" exclusively.`
       );
       secret = this.options.secretOrPrivateKey;
     }
