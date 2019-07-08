@@ -28,7 +28,7 @@
     "husky": "0.14.3",
     "lint-staged": "8.1.7",
     "prettier": "1.17.1",
-    "typescript": "3.5.1"
+    "typescript": "3.5.3"
   },
   "lint-staged": {
     "*.ts": [
