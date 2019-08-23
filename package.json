@@ -25,7 +25,7 @@
     "@types/jest": "24.0.16",
     "@nestjs/common": "6.5.3",
     "@types/node": "7.10.7",
-    "husky": "3.0.2",
+    "husky": "3.0.4",
     "lint-staged": "9.2.3",
     "prettier": "1.18.2",
     "typescript": "3.5.3"
