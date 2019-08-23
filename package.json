@@ -17,7 +17,7 @@
     "@nestjs/common": "^6.0.0"
   },
   "devDependencies": {
-    "jest": "24.8.0",
+    "jest": "24.9.0",
     "ts-jest": "24.0.2",
     "reflect-metadata": "0.1.13",
     "@nestjs/core": "6.5.3",
