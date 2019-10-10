@@ -24,12 +24,15 @@ const config = {
 };
 
 describe('JWT Service', () => {
+  let verifySpy: jest.SpyInstance;
+  let signSpy: jest.SpyInstance;
+
   beforeAll(async () => {
-    jest
+    signSpy = jest
       .spyOn(jwt, 'sign')
       .mockImplementation((token, secret, options) => secret);
 
-    jest
+    verifySpy = jest
       .spyOn(jwt, 'verify')
       .mockImplementation((token, secret, options) => secret);
   });
@@ -149,6 +152,43 @@ describe('JWT Service', () => {
 
     afterEach(async () => {
       consoleCheck.mockClear();
+    });
+  });
+
+  describe('should allow buffers for secrets', () => {
+    let jwtService: JwtService;
+    let secretB64: Buffer;
+
+    beforeAll(async () => {
+      secretB64 = Buffer.from('ThisIsARandomSecret', 'base64');
+      jwtService = await setup({ secret: secretB64 });
+      verifySpy.mockRestore();
+      signSpy.mockRestore();
+    });
+
+    it('verifying should use base64 buffer key', async () => {
+      let token = jwt.sign({ foo: 'bar' }, secretB64);
+
+      expect(jwtService.verify(token)).toHaveProperty('foo', 'bar');
+    });
+
+    it('verifying (async) should use base64 buffer key', async () => {
+      let token = jwt.sign({ foo: 'bar' }, secretB64);
+
+      expect(jwtService.verifyAsync(token)).resolves.toHaveProperty(
+        'foo',
+        'bar'
+      );
+    });
+
+    afterAll(() => {
+      signSpy = jest
+        .spyOn(jwt, 'sign')
+        .mockImplementation((token, secret, options) => secret);
+
+      verifySpy = jest
+        .spyOn(jwt, 'verify')
+        .mockImplementation((token, secret, options) => secret);
     });
   });
 });

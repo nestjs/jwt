@@ -10,16 +10,16 @@ export interface JwtModuleOptions {
   signOptions?: jwt.SignOptions;
   secret?: string | Buffer;
   publicKey?: string | Buffer;
-  privateKey?: jwt.Secret;
+  privateKey?: string | Buffer;
   /**
    * @deprecated
    */
-  secretOrPrivateKey?: jwt.Secret;
+  secretOrPrivateKey?: string | Buffer;
   secretOrKeyProvider?: (
     requestType: JwtSecretRequestType,
     tokenOrPayload: string | object | Buffer,
     options?: jwt.VerifyOptions | jwt.SignOptions
-  ) => jwt.Secret;
+  ) => string | Buffer;
   verifyOptions?: jwt.VerifyOptions;
 }
 
