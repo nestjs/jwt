@@ -42,6 +42,7 @@ Import `JwtModule`:
 @Module({
   imports: [JwtModule.register({ secret: 'hard!to-guess_secret' })],
   providers: [...],
+  exports: [JwtModule]
 })
 export class AuthModule {}
 ```
