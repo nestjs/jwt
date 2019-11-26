@@ -17,18 +17,18 @@
     "@nestjs/common": "^6.0.0"
   },
   "devDependencies": {
-    "jest": "24.8.0",
-    "ts-jest": "24.0.2",
+    "jest": "24.9.0",
+    "ts-jest": "24.1.0",
     "reflect-metadata": "0.1.13",
-    "@nestjs/core": "6.2.4",
-    "@nestjs/testing": "6.2.4",
-    "@types/jest": "24.0.13",
-    "@nestjs/common": "6.2.4",
-    "@types/node": "7.10.6",
-    "husky": "0.14.3",
-    "lint-staged": "8.1.7",
-    "prettier": "1.17.1",
-    "typescript": "3.4.5"
+    "@nestjs/core": "6.9.0",
+    "@nestjs/testing": "6.9.0",
+    "@types/jest": "24.0.22",
+    "@nestjs/common": "6.9.0",
+    "@types/node": "7.10.9",
+    "husky": "3.0.9",
+    "lint-staged": "9.4.2",
+    "prettier": "1.18.2",
+    "typescript": "3.7.2"
   },
   "lint-staged": {
     "*.ts": [
@@ -37,7 +37,7 @@
     ]
   },
   "dependencies": {
-    "@types/jsonwebtoken": "7.2.8",
-    "jsonwebtoken": "8.4.0"
+    "@types/jsonwebtoken": "8.3.5",
+    "jsonwebtoken": "8.5.1"
   }
 }
