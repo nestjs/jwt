@@ -37,7 +37,7 @@
     ]
   },
   "dependencies": {
-    "@types/jsonwebtoken": "8.3.5",
+    "@types/jsonwebtoken": "8.3.6",
     "jsonwebtoken": "8.5.1"
   }
 }
