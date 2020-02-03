@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "jest": "25.1.0",
-    "ts-jest": "25.1.0",
+    "ts-jest": "25.2.0",
     "reflect-metadata": "0.1.13",
     "@nestjs/core": "6.11.5",
     "@nestjs/testing": "6.11.5",
