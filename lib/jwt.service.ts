@@ -63,7 +63,7 @@ export class JwtService {
       JwtSecretRequestType.VERIFY
     );
 
-    return jwt.verify(token, secret.toString(), verifyOptions) as T;
+    return jwt.verify(token, secret, verifyOptions) as T;
   }
 
   verifyAsync<T extends object = any>(
@@ -79,7 +79,7 @@ export class JwtService {
     );
 
     return new Promise((resolve, reject) =>
-      jwt.verify(token, secret.toString(), verifyOptions, (err, decoded) =>
+      jwt.verify(token, secret, verifyOptions, (err, decoded) =>
         err ? reject(err) : resolve(decoded as T)
       )
     ) as Promise<T>;
