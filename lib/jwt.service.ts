@@ -63,7 +63,7 @@ export class JwtService {
       JwtSecretRequestType.VERIFY
     );
 
-    return jwt.verify(token, secret.toString(), verifyOptions) as T;
+    return jwt.verify(token, secret, verifyOptions) as T;
   }
 
   verifyAsync<T extends object = any>(
@@ -79,7 +79,7 @@ export class JwtService {
     );
 
     return new Promise((resolve, reject) =>
-      jwt.verify(token, secret.toString(), verifyOptions, (err, decoded) =>
+      jwt.verify(token, secret, verifyOptions, (err, decoded) =>
         err ? reject(err) : resolve(decoded as T)
       )
     ) as Promise<T>;
@@ -109,7 +109,7 @@ export class JwtService {
     options: jwt.VerifyOptions | jwt.SignOptions,
     key: 'publicKey' | 'privateKey',
     secretRequestType: JwtSecretRequestType
-  ): string | Buffer | jwt.Secret {
+  ): string | Buffer {
     let secret = this.options.secretOrKeyProvider
       ? this.options.secretOrKeyProvider(secretRequestType, token, options)
       : this.options.secret || this.options[key];
