@@ -109,7 +109,7 @@ export class JwtService {
     options: jwt.VerifyOptions | jwt.SignOptions,
     key: 'publicKey' | 'privateKey',
     secretRequestType: JwtSecretRequestType
-  ): string | Buffer {
+  ): string | Buffer | jwt.Secret {
     let secret = this.options.secretOrKeyProvider
       ? this.options.secretOrKeyProvider(secretRequestType, token, options)
       : this.options.secret || this.options[key];
