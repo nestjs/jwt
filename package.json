@@ -39,7 +39,7 @@
     "husky": "4.2.5",
     "lint-staged": "10.1.4",
     "prettier": "2.0.4",
-    "release-it": "13.5.3",
+    "release-it": "13.5.4",
     "typescript": "3.8.3"
   },
   "dependencies": {
