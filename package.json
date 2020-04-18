@@ -37,7 +37,7 @@
     "@nestjs/common": "7.0.8",
     "@types/node": "7.10.9",
     "husky": "4.2.5",
-    "lint-staged": "10.1.4",
+    "lint-staged": "10.1.5",
     "prettier": "2.0.4",
     "release-it": "13.5.4",
     "typescript": "3.8.3"
