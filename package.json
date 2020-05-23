@@ -43,7 +43,7 @@
     "typescript": "3.9.3"
   },
   "dependencies": {
-    "@types/jsonwebtoken": "8.3.9",
+    "@types/jsonwebtoken": "8.5.0",
     "jsonwebtoken": "8.5.1"
   },
   "lint-staged": {
