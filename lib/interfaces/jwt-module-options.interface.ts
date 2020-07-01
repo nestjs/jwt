@@ -33,3 +33,11 @@ export interface JwtModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
   useFactory?: (...args: any[]) => Promise<JwtModuleOptions> | JwtModuleOptions;
   inject?: any[];
 }
+
+export interface JwtSignOptions extends jwt.SignOptions {
+  secret?: string | Buffer;
+}
+
+export interface JwtVerifyOptions extends jwt.VerifyOptions {
+  secret?: string | Buffer;
+}

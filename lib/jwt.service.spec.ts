@@ -191,4 +191,35 @@ describe('JWT Service', () => {
         .mockImplementation((token, secret, options) => secret);
     });
   });
+
+  describe('should use secret key from options', () => {
+    let jwtService: JwtService;
+
+    beforeAll(async () => {
+      jwtService = await setup({
+        ...config,
+        secretOrKeyProvider: undefined
+      });
+    });
+
+    let secret = 'custom';
+
+    it('signing should use secret key from options', async () => {
+      expect(await jwtService.sign('random', { secret })).toBe(secret);
+    });
+
+    it('signing (async) should use secret key from options', async () => {
+      expect(jwtService.signAsync('random', { secret })).resolves.toBe(secret);
+    });
+
+    it('verifying should use secret key from options', async () => {
+      expect(await jwtService.verify('random', { secret })).toBe(secret);
+    });
+
+    it('verifying (async) should use secret key from options', async () => {
+      expect(jwtService.verifyAsync('random', { secret })).resolves.toBe(
+        secret
+      );
+    });
+  });
 });

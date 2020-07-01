@@ -2,7 +2,9 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import {
   JwtModuleOptions,
-  JwtSecretRequestType
+  JwtSecretRequestType,
+  JwtVerifyOptions,
+  JwtSignOptions
 } from './interfaces/jwt-module-options.interface';
 import { JWT_MODULE_OPTIONS } from './jwt.constants';
 
@@ -14,9 +16,9 @@ export class JwtService {
     @Inject(JWT_MODULE_OPTIONS) private readonly options: JwtModuleOptions
   ) {}
 
-  sign(payload: string | Buffer | object, options?: jwt.SignOptions): string {
+  sign(payload: string | Buffer | object, options?: JwtSignOptions): string {
     const signOptions = this.mergeJwtOptions(
-      options,
+      { ...options },
       'signOptions'
     ) as jwt.SignOptions;
     const secret = this.getSecretKey(
@@ -31,10 +33,10 @@ export class JwtService {
 
   signAsync(
     payload: string | Buffer | object,
-    options?: jwt.SignOptions
+    options?: JwtSignOptions
   ): Promise<string> {
     const signOptions = this.mergeJwtOptions(
-      options,
+      { ...options },
       'signOptions'
     ) as jwt.SignOptions;
     const secret = this.getSecretKey(
@@ -51,11 +53,8 @@ export class JwtService {
     );
   }
 
-  verify<T extends object = any>(
-    token: string,
-    options?: jwt.VerifyOptions
-  ): T {
-    const verifyOptions = this.mergeJwtOptions(options, 'verifyOptions');
+  verify<T extends object = any>(token: string, options?: JwtVerifyOptions): T {
+    const verifyOptions = this.mergeJwtOptions({ ...options }, 'verifyOptions');
     const secret = this.getSecretKey(
       token,
       options,
@@ -68,9 +67,9 @@ export class JwtService {
 
   verifyAsync<T extends object = any>(
     token: string,
-    options?: jwt.VerifyOptions
+    options?: JwtVerifyOptions
   ): Promise<T> {
-    const verifyOptions = this.mergeJwtOptions(options, 'verifyOptions');
+    const verifyOptions = this.mergeJwtOptions({ ...options }, 'verifyOptions');
     const secret = this.getSecretKey(
       token,
       options,
@@ -93,9 +92,10 @@ export class JwtService {
   }
 
   private mergeJwtOptions(
-    options: jwt.VerifyOptions | jwt.SignOptions,
+    options: JwtVerifyOptions | JwtSignOptions,
     key: 'verifyOptions' | 'signOptions'
   ): jwt.VerifyOptions | jwt.SignOptions {
+    delete options.secret;
     return options
       ? {
           ...(this.options[key] || {}),
@@ -106,13 +106,13 @@ export class JwtService {
 
   private getSecretKey(
     token: string | object | Buffer,
-    options: jwt.VerifyOptions | jwt.SignOptions,
+    options: JwtVerifyOptions | JwtSignOptions,
     key: 'publicKey' | 'privateKey',
     secretRequestType: JwtSecretRequestType
   ): string | Buffer | jwt.Secret {
     let secret = this.options.secretOrKeyProvider
       ? this.options.secretOrKeyProvider(secretRequestType, token, options)
-      : this.options.secret || this.options[key];
+      : options?.secret || this.options.secret || this.options[key];
 
     if (this.options.secretOrPrivateKey) {
       this.logger.warn(
