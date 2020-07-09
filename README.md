@@ -152,19 +152,19 @@ It works the same as `useClass` with one critical difference - `JwtModule` will 
 
 The `JwtService` uses [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) underneath.
 
-#### jwtService.sign(payload: string | Object | Buffer, options?: SignOptions): string
+#### jwtService.sign(payload: string | Object | Buffer, options?: JwtSignOptions): string
 
-The sign method is an implementation of jsonwebtoken `.sign()`.
+The sign method is an implementation of jsonwebtoken `.sign()`. Differing from jsonwebtoken it also allows an additional `secret` property on `options` to override the secret passed in from the module. It only overrides the `secret`, `publicKey` or `privateKey` though not a `secretOrKeyProvider`.
 
-#### jwtService.signAsync(payload: string | Object | Buffer, options?: SignOptions): Promise\<string\>
+#### jwtService.signAsync(payload: string | Object | Buffer, options?: JwtSignOptions): Promise\<string\>
 
 The asynchronous `.sign()` method.
 
-#### jwtService.verify\<T extends object = any>(token: string, options?: VerifyOptions): T
+#### jwtService.verify\<T extends object = any>(token: string, options?: JwtVerifyOptions): T
 
-The verify method is an implementation of jsonwebtoken `.verify()`.
+The verify method is an implementation of jsonwebtoken `.verify()`. Differing from jsonwebtoken it also allows an additional `secret` property on `options` to override the secret passed in from the module. It only overrides the `secret`, `publicKey` or `privateKey` though not a `secretOrKeyProvider`.
 
-#### jwtService.verifyAsync\<T extends object = any>(token: string, options?: VerifyOptions): Promise\<T\>
+#### jwtService.verifyAsync\<T extends object = any>(token: string, options?: JwtVerifyOptions): Promise\<T\>
 
 The asynchronous `.verify()` method.
 
