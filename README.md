@@ -61,7 +61,7 @@ If you want to control secret and key management dynamically you can use the `se
 
 ```typescript
 JwtModule.register({
-   /* Secret has precedance over keys */
+   /* Secret has precedence over keys */
   secret: 'hard!to-guess_secret',
 
   /* public key used in asymmetric algorithms (required if non other secrets present) */
@@ -70,7 +70,7 @@ JwtModule.register({
   /* private key used in asymmetric algorithms (required if non other secrets present) */
   privateKey: '...'
 
-  /* Dynamic key provider has precedance over static secret or pub/private keys */
+  /* Dynamic key provider has precedence over static secret or pub/private keys */
   secretOrKeyProvider: (
     requestType: JwtSecretRequestType,
     tokenOrPayload: string | Object | Buffer,
