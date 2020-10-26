@@ -24,7 +24,7 @@
     "@commitlint/cli": "11.0.0",
     "@commitlint/config-angular": "11.0.0",
     "jest": "26.6.1",
-    "ts-jest": "26.4.2",
+    "ts-jest": "26.4.3",
     "reflect-metadata": "0.1.13",
     "@nestjs/core": "7.4.4",
     "@nestjs/testing": "7.4.4",
