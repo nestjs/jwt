@@ -111,7 +111,7 @@ Obviously, our factory behaves like every other one (might be `async` and is abl
 JwtModule.registerAsync({
   imports: [ConfigModule],
   useFactory: async (configService: ConfigService) => ({
-    secret: configService.getString('SECRET'),
+    secret: configService.get<string>('SECRET'),
   }),
   inject: [ConfigService],
 }),
