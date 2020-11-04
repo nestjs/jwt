@@ -154,7 +154,7 @@ The `JwtService` uses [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
 
 #### jwtService.sign(payload: string | Object | Buffer, options?: JwtSignOptions): string
 
-The sign method is an implementation of jsonwebtoken `.sign()`. Differing from jsonwebtoken it also allows an additional `secret` property on `options` to override the secret passed in from the module. It only overrides the `secret`, `publicKey` or `privateKey` though not a `secretOrKeyProvider`.
+The sign method is an implementation of jsonwebtoken `.sign()`. Differing from jsonwebtoken it also allows an additional `secret`, `privateKey`, and `publicKey` properties on `options` to override options passed in from the module. It only overrides the `secret`, `publicKey` or `privateKey` though not a `secretOrKeyProvider`.
 
 #### jwtService.signAsync(payload: string | Object | Buffer, options?: JwtSignOptions): Promise\<string\>
 
@@ -162,7 +162,7 @@ The asynchronous `.sign()` method.
 
 #### jwtService.verify\<T extends object = any>(token: string, options?: JwtVerifyOptions): T
 
-The verify method is an implementation of jsonwebtoken `.verify()`. Differing from jsonwebtoken it also allows an additional `secret` property on `options` to override the secret passed in from the module. It only overrides the `secret`, `publicKey` or `privateKey` though not a `secretOrKeyProvider`.
+The verify method is an implementation of jsonwebtoken `.verify()`. Differing from jsonwebtoken it also allows an additional `secret`, `privateKey`, and `publicKey` properties on `options` to override options passed in from the module. It only overrides the `secret`, `publicKey` or `privateKey` though not a `secretOrKeyProvider`.
 
 #### jwtService.verifyAsync\<T extends object = any>(token: string, options?: JwtVerifyOptions): Promise\<T\>
 

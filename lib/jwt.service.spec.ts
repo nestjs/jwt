@@ -222,4 +222,39 @@ describe('JWT Service', () => {
       );
     });
   });
+
+  describe('should use private/public key from options', () => {
+    let jwtService: JwtService;
+
+    beforeAll(async () => {
+      jwtService = await setup({
+        ...config,
+        secretOrKeyProvider: undefined,
+        secret: undefined
+      });
+    });
+
+    let privateKey = 'customPrivateKey';
+    let publicKey = 'customPublicKey';
+
+    it('signing should use private key from options', async () => {
+      expect(await jwtService.sign('random', { privateKey })).toBe(privateKey);
+    });
+
+    it('signing (async) should use private key from options', async () => {
+      expect(jwtService.signAsync('random', { privateKey })).resolves.toBe(
+        privateKey
+      );
+    });
+
+    it('verifying should use public key from options', async () => {
+      expect(await jwtService.verify('random', { publicKey })).toBe(publicKey);
+    });
+
+    it('verifying (async) should use public key from options', async () => {
+      expect(jwtService.verifyAsync('random', { publicKey })).resolves.toBe(
+        publicKey
+      );
+    });
+  });
 });
