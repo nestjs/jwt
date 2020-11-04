@@ -3,8 +3,8 @@ import * as jwt from 'jsonwebtoken';
 import {
   JwtModuleOptions,
   JwtSecretRequestType,
-  JwtVerifyOptions,
-  JwtSignOptions
+  JwtSignOptions,
+  JwtVerifyOptions
 } from './interfaces/jwt-module-options.interface';
 import { JWT_MODULE_OPTIONS } from './jwt.constants';
 
