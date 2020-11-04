@@ -3,8 +3,8 @@ import * as jwt from 'jsonwebtoken';
 import {
   JwtModuleOptions,
   JwtSecretRequestType,
-  JwtVerifyOptions,
-  JwtSignOptions
+  JwtSignOptions,
+  JwtVerifyOptions
 } from './interfaces/jwt-module-options.interface';
 import { JWT_MODULE_OPTIONS } from './jwt.constants';
 
@@ -96,6 +96,11 @@ export class JwtService {
     key: 'verifyOptions' | 'signOptions'
   ): jwt.VerifyOptions | jwt.SignOptions {
     delete options.secret;
+    if (key === 'signOptions') {
+      delete (options as JwtSignOptions).privateKey;
+    } else {
+      delete (options as JwtVerifyOptions).publicKey;
+    }
     return options
       ? {
           ...(this.options[key] || {}),
@@ -112,7 +117,13 @@ export class JwtService {
   ): string | Buffer | jwt.Secret {
     let secret = this.options.secretOrKeyProvider
       ? this.options.secretOrKeyProvider(secretRequestType, token, options)
-      : options?.secret || this.options.secret || this.options[key];
+      : options?.secret ||
+        this.options.secret ||
+        (key === 'privateKey'
+          ? (options as JwtSignOptions)?.privateKey || this.options.privateKey
+          : (options as JwtVerifyOptions)?.publicKey ||
+            this.options.publicKey) ||
+        this.options[key];
 
     if (this.options.secretOrPrivateKey) {
       this.logger.warn(

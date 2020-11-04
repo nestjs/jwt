@@ -36,8 +36,10 @@ export interface JwtModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
 
 export interface JwtSignOptions extends jwt.SignOptions {
   secret?: string | Buffer;
+  privateKey?: string | Buffer;
 }
 
 export interface JwtVerifyOptions extends jwt.VerifyOptions {
   secret?: string | Buffer;
+  publicKey?: string | Buffer;
 }
