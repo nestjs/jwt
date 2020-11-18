@@ -6,6 +6,7 @@ import {
 } from './interfaces/jwt-module-options.interface';
 import { JwtModule } from './jwt.module';
 import { JwtService } from './jwt.service';
+import { WrongSecretProviderError } from './jwt.errors';
 
 const setup = async (config: JwtModuleOptions) => {
   const module = await Test.createTestingModule({
@@ -255,6 +256,62 @@ describe('JWT Service', () => {
       expect(jwtService.verifyAsync('random', { publicKey })).resolves.toBe(
         publicKey
       );
+    });
+  });
+
+  describe('should use async secretOrKeyProvider', () => {
+    let jwtService: JwtService;
+    let consoleCheck: jest.SpyInstance;
+
+    beforeAll(async () => {
+      jwtService = await setup({
+        ...config,
+        secretOrKeyProvider: async (requestType: JwtSecretRequestType) =>
+          requestType === JwtSecretRequestType.SIGN ? 'S' : 'V'
+      });
+      consoleCheck = jest.spyOn(jwtService['logger'], 'warn');
+    });
+
+    it('signing should throw error', async () => {
+      let error: any;
+
+      try {
+        await jwtService.sign('random');
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error instanceof WrongSecretProviderError).toBe(true);
+      expect(consoleCheck).toHaveBeenCalledTimes(1);
+    });
+
+    it('signing (async) should use SIGN option function', async () => {
+      expect(jwtService.signAsync('random')).resolves.toBe(
+        config.secretOrKeyProvider(JwtSecretRequestType.SIGN)
+      );
+    });
+
+    it('verifying should throw error', async () => {
+      let error: any;
+
+      try {
+        await jwtService.verify('random');
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error instanceof WrongSecretProviderError).toBe(true);
+      expect(consoleCheck).toHaveBeenCalledTimes(1);
+    });
+
+    it('verifying (async) should use SIGN option function', async () => {
+      expect(jwtService.verifyAsync('random')).resolves.toBe(
+        config.secretOrKeyProvider(JwtSecretRequestType.VERIFY)
+      );
+    });
+
+    afterEach(async () => {
+      consoleCheck.mockClear();
     });
   });
 });
