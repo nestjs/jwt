@@ -33,7 +33,7 @@
     "@typescript-eslint/parser": "4.23.0",
     "eslint": "7.26.0",
     "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-import": "2.23.0",
+    "eslint-plugin-import": "2.23.1",
     "@nestjs/common": "7.6.15",
     "@types/node": "7.10.14",
     "husky": "6.0.0",
