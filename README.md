@@ -68,7 +68,7 @@ JwtModule.register({
   publicKey: '...',
 
   /* private key used in asymmetric algorithms (required if non other secrets present) */
-  privateKey: '...'
+  privateKey: '...',
 
   /* Dynamic key provider has precedence over static secret or pub/private keys */
   secretOrKeyProvider: (
