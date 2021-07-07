@@ -18,7 +18,7 @@
     "release": "release-it"
   },
   "peerDependencies": {
-    "@nestjs/common": "^6.0.0 || ^7.0.0"
+    "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "12.1.4",
@@ -26,15 +26,15 @@
     "jest": "27.0.6",
     "ts-jest": "27.0.3",
     "reflect-metadata": "0.1.13",
-    "@nestjs/core": "7.6.18",
-    "@nestjs/testing": "7.6.18",
+    "@nestjs/core": "8.0.0",
+    "@nestjs/testing": "8.0.0",
     "@types/jest": "26.0.24",
     "@typescript-eslint/eslint-plugin": "4.28.2",
     "@typescript-eslint/parser": "4.28.2",
     "eslint": "7.30.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.23.4",
-    "@nestjs/common": "7.6.18",
+    "@nestjs/common": "8.0.0",
     "@types/node": "14.17.4",
     "husky": "7.0.1",
     "lint-staged": "11.0.0",
