@@ -23,7 +23,7 @@
   "devDependencies": {
     "@commitlint/cli": "15.0.0",
     "@commitlint/config-angular": "15.0.0",
-    "jest": "27.4.2",
+    "jest": "27.4.3",
     "ts-jest": "27.0.7",
     "reflect-metadata": "0.1.13",
     "@nestjs/core": "8.2.3",
