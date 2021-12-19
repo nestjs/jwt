@@ -49,7 +49,7 @@ describe('JWT Service', () => {
     signSpy.mockRestore();
   });
 
-  describe('should use config.secretOrKeyProvider to get a secret', () => {
+  describe('should use config.secretOrKeyProvider', () => {
     let jwtService: JwtService;
     let testPayload: string = getRandomString();
 
@@ -115,7 +115,7 @@ describe('JWT Service', () => {
     });
   });
 
-  describe('should use public/private key', () => {
+  describe('should use config.privateKey and config.publicKey', () => {
     let jwtService: JwtService;
     let testPayload: string = getRandomString();
 
@@ -152,7 +152,7 @@ describe('JWT Service', () => {
     });
   });
 
-  describe('override but warn deprecation for "secretOrPrivateKey"', () => {
+  describe('should use config.secretOrPrivateKey but warn about deprecation', () => {
     let jwtService: JwtService;
     let consoleWarnSpy: jest.SpyInstance;
     let testPayload: string = getRandomString();
