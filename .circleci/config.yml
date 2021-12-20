@@ -41,7 +41,7 @@ jobs:
       - image: circleci/node:16
     steps:
       - checkout
-      - &restore-cache
+      - *restore-cache
       - *install-deps
       - run:
           name: Unit tests
