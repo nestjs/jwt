@@ -17,7 +17,7 @@ jobs:
   build:
     working_directory: ~/nest
     docker:
-      - image: circleci/node:17
+      - image: circleci/node:16
     steps:
       - checkout
       - run:
@@ -37,7 +37,8 @@ jobs:
           command: npm run build    
   test:
     working_directory: ~/nest
-    machine: true
+    docker:
+      - image: circleci/node:16
     steps:
       - checkout
       - &restore-cache
