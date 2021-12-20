@@ -35,10 +35,23 @@ jobs:
       - run:
           name: Build
           command: npm run build    
+  test:
+    working_directory: ~/nest
+    machine: true
+    steps:
+      - checkout
+      - &restore-cache
+      - *install-deps
+      - run:
+          name: Unit tests
+          command: npm run test
 
 workflows:
   version: 2
   build-and-test:
     jobs:
       - build
+      - test:
+          requires:
+            - build
       
