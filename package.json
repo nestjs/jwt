@@ -21,7 +21,7 @@
     "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.0.1",
+    "@commitlint/cli": "17.0.2",
     "@commitlint/config-angular": "17.0.0",
     "jest": "28.1.0",
     "ts-jest": "28.0.3",
