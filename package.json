@@ -38,7 +38,7 @@
     "@types/node": "16.11.41",
     "husky": "8.0.1",
     "lint-staged": "13.0.1",
-    "prettier": "2.7.0",
+    "prettier": "2.7.1",
     "release-it": "15.0.0",
     "typescript": "4.7.3"
   },
