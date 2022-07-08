@@ -1,6 +1,6 @@
 {
   "name": "@nestjs/jwt",
-  "version": "8.0.1",
+  "version": "9.0.0",
   "description": "Nest - modern, fast, powerful node.js web framework (@jwt)",
   "author": "Kamil Mysliwiec",
   "license": "MIT",
