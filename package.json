@@ -18,7 +18,7 @@
     "release": "release-it"
   },
   "peerDependencies": {
-    "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0"
+    "@nestjs/common": "^8.0.0 || ^9.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "17.0.3",
