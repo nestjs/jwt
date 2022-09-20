@@ -86,10 +86,10 @@ export class JwtService {
     ) as Promise<T>;
   }
 
-  decode(
+  decode<T = null | { [key: string]: any } | string>(
     token: string,
     options?: jwt.DecodeOptions
-  ): null | { [key: string]: any } | string {
+  ): T {
     return jwt.decode(token, options);
   }
 
