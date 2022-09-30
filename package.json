@@ -15,7 +15,8 @@
     "prepublish:npm": "npm run build",
     "publish:npm": "npm publish --access public",
     "prerelease": "npm run build",
-    "release": "release-it"
+    "release": "release-it",
+    "prepare": "husky install"
   },
   "peerDependencies": {
     "@nestjs/common": "^8.0.0 || ^9.0.0"
@@ -47,15 +48,7 @@
     "jsonwebtoken": "8.5.1"
   },
   "lint-staged": {
-    "*.ts": [
-      "prettier --write"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -c .commitlintrc.json -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
+    "**/*.{ts,json}": []
   },
   "repository": {
     "type": "git",
