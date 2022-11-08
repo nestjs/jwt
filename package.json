@@ -37,7 +37,7 @@
     "eslint-plugin-import": "2.26.0",
     "@nestjs/common": "9.2.0",
     "@types/node": "18.11.9",
-    "husky": "8.0.1",
+    "husky": "8.0.2",
     "lint-staged": "13.0.3",
     "prettier": "2.7.1",
     "release-it": "15.5.0",
