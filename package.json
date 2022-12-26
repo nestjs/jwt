@@ -1,6 +1,6 @@
 {
   "name": "@nestjs/jwt",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "description": "Nest - modern, fast, powerful node.js web framework (@jwt)",
   "author": "Kamil Mysliwiec",
   "license": "MIT",
@@ -44,8 +44,8 @@
     "typescript": "4.8.4"
   },
   "dependencies": {
-    "@types/jsonwebtoken": "8.5.8",
-    "jsonwebtoken": "8.5.1"
+    "@types/jsonwebtoken": "9.0.0",
+    "jsonwebtoken": "9.0.0"
   },
   "lint-staged": {
     "**/*.{ts,json}": []
