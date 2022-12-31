@@ -29,7 +29,7 @@
     "reflect-metadata": "0.1.13",
     "@nestjs/core": "9.2.1",
     "@nestjs/testing": "9.2.1",
-    "@types/jest": "29.2.4",
+    "@types/jest": "29.2.5",
     "@typescript-eslint/eslint-plugin": "5.47.1",
     "@typescript-eslint/parser": "5.47.1",
     "eslint": "8.30.0",
