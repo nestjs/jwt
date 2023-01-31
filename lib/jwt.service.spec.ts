@@ -32,7 +32,11 @@ describe('JWT Service', () => {
     signSpy = jest
       .spyOn(jwt, 'sign')
       .mockImplementation((token, secret, options, callback) => {
-        const result = 'signed_' + token + '_by_' + secret;
+        const ssecret =
+          secret.hasOwnProperty('key')
+            ? secret['key']
+            : secret;
+        const result = 'signed_' + token + '_by_' + ssecret;
         return callback ? callback(null, result) : result;
       });
 
@@ -131,6 +135,22 @@ describe('JWT Service', () => {
       expect(await jwtService.sign(testPayload)).toBe(
         `signed_${testPayload}_by_private_key`
       );
+    });
+
+    it('signing should use overriden string privateKey', async () => {
+      expect(
+        await jwtService.sign(testPayload, {
+          privateKey: 'another_private_key'
+        })
+      ).toBe(`signed_${testPayload}_by_another_private_key`);
+    });
+
+    it('signing should use overriden passphrase-encoded privateKey', async () => {
+      expect(
+        await jwtService.sign(testPayload, {
+          privateKey: { key: 'encoded_private_key', passphrase: 'passphrase' }
+        })
+      ).toBe(`signed_${testPayload}_by_encoded_private_key`);
     });
 
     it('signing (async) should use config.privateKey', async () => {
