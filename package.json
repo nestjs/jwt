@@ -36,7 +36,7 @@
     "eslint-config-prettier": "8.6.0",
     "eslint-plugin-import": "2.27.5",
     "@nestjs/common": "9.3.4",
-    "@types/node": "18.11.19",
+    "@types/node": "18.13.0",
     "husky": "8.0.3",
     "lint-staged": "13.1.1",
     "prettier": "2.8.3",
