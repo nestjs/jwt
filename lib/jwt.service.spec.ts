@@ -303,4 +303,79 @@ describe('JWT Service', () => {
       ).resolves.toBe(`verified_${testPayload}_by_customPublicKey`);
     });
   });
+
+  describe('should not use invalid sign options', () => {
+    let jwtService: JwtService;
+    let testPayloadStr: string = getRandomString();
+
+    beforeAll(async () => {
+      jwtService = await setup({ secretOrKeyProvider: undefined });
+    });
+
+    it('should not "sign" expect errors with a "payload" string and "secret"', () => {
+      // @ts-expect-no-error
+      expect(() => jwtService.sign(testPayloadStr, { secret: 'secret' }));
+    });
+
+    it('should not "signAsync" expect errors with a "payload" string and "privateKey"', () => {
+      // @ts-expect-no-error
+      expect(() =>
+        jwtService.signAsync(testPayloadStr, { privateKey: 'privateKey' })
+      );
+    });
+  });
+
+  describe('should use invalid sign options', () => {
+    const signOptions: jwt.SignOptions = {
+      expiresIn: '1d'
+    };
+
+    let jwtService: JwtService;
+    let testPayloadStr: string = getRandomString();
+    let testPayloadObj: object = {};
+
+    beforeAll(async () => {
+      jwtService = await setup({ signOptions, secretOrKeyProvider: undefined });
+    });
+
+    it('should "sign" expect errors with a "payload" string with "expiresIn"', () => {
+      expect(() =>
+        // @ts-expect-error
+        jwtService.sign(testPayloadStr, { expiresIn: 60 })
+      ).toThrowError(
+        'Not allowed payload as string with these sign options: expiresIn'
+      );
+    });
+
+    it('should "signAsync" expect errors with a "payload" string with "notBefore"', () => {
+      expect(() =>
+        // @ts-expect-error
+        jwtService.signAsync(testPayloadStr, { notBefore: 60 })
+      ).toThrowError(
+        'Not allowed payload as string with these sign options: expiresIn, notBefore'
+      );
+    });
+
+    it('should not "sign" expect errors with a "payload" object with "notBefore" ', () => {
+      // @ts-expect-no-error
+      expect(() => jwtService.sign(testPayloadObj, { notBefore: 60 }));
+    });
+
+    it('should not "signAsync" expect errors with a "payload" object with "notBefore" ', () => {
+      // @ts-expect-no-error
+      expect(() => jwtService.signAsync(testPayloadObj, { notBefore: 60 }));
+    });
+
+    it('should "sign" expect errors using "payload" string with already defined invalid sign options', () => {
+      expect(() => jwtService.sign(testPayloadStr)).toThrowError(
+        'Not allowed payload as string with these sign options: expiresIn'
+      );
+    });
+
+    it('should "signAsync" expect errors using "payload" string with already defined invalid sign options', () => {
+      expect(() => jwtService.signAsync(testPayloadStr)).toThrowError(
+        'Not allowed payload as string with these sign options: expiresIn'
+      );
+    });
+  });
 });
