@@ -18,6 +18,11 @@ export class JwtService {
     private readonly options: JwtModuleOptions = {}
   ) {}
 
+  sign(
+    payload: string,
+    options?: Omit<JwtSignOptions, keyof jwt.SignOptions>
+  ): string;
+  sign(payload: Buffer | object, options?: JwtSignOptions): string;
   sign(payload: string | Buffer | object, options?: JwtSignOptions): string {
     const signOptions = this.mergeJwtOptions(
       { ...options },
@@ -30,9 +35,29 @@ export class JwtService {
       JwtSecretRequestType.SIGN
     );
 
+    const allowedSignOptKeys = ['secret', 'privateKey'];
+    const signOptKeys = Object.keys(signOptions);
+    if (
+      typeof payload === 'string' &&
+      signOptKeys.some((k) => !allowedSignOptKeys.includes(k))
+    ) {
+      throw new Error(
+        'Not allowed payload as string with these sign options: ' +
+          signOptKeys.join(', ')
+      );
+    }
+
     return jwt.sign(payload, secret, signOptions);
   }
 
+  signAsync(
+    payload: string,
+    options?: Omit<JwtSignOptions, keyof jwt.SignOptions>
+  ): Promise<string>;
+  signAsync(
+    payload: Buffer | object,
+    options?: JwtSignOptions
+  ): Promise<string>;
   signAsync(
     payload: string | Buffer | object,
     options?: JwtSignOptions
@@ -47,6 +72,18 @@ export class JwtService {
       'privateKey',
       JwtSecretRequestType.SIGN
     );
+
+    const allowedSignOptKeys = ['secret', 'privateKey'];
+    const signOptKeys = Object.keys(signOptions);
+    if (
+      typeof payload === 'string' &&
+      signOptKeys.some((k) => !allowedSignOptKeys.includes(k))
+    ) {
+      throw new Error(
+        'Not allowed payload as string with these sign options: ' +
+          signOptKeys.join(', ')
+      );
+    }
 
     return new Promise((resolve, reject) =>
       jwt.sign(payload, secret, signOptions, (err, encoded) =>
