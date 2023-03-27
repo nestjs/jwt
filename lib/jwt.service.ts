@@ -6,7 +6,7 @@ import {
   JwtSignOptions,
   JwtVerifyOptions
 } from './interfaces';
-import { JWT_MODULE_OPTIONS } from './jwt.constants';
+import { MODULE_OPTIONS_TOKEN } from './jwt.module-definition';
 
 @Injectable()
 export class JwtService {
@@ -14,7 +14,7 @@ export class JwtService {
 
   constructor(
     @Optional()
-    @Inject(JWT_MODULE_OPTIONS)
+    @Inject(MODULE_OPTIONS_TOKEN)
     private readonly options: JwtModuleOptions = {}
   ) {}
 

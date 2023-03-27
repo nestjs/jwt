@@ -1,4 +1,3 @@
-import { ModuleMetadata, Type } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 
 export enum JwtSecretRequestType {
@@ -21,17 +20,6 @@ export interface JwtModuleOptions {
     options?: jwt.VerifyOptions | jwt.SignOptions
   ) => jwt.Secret;
   verifyOptions?: jwt.VerifyOptions;
-}
-
-export interface JwtOptionsFactory {
-  createJwtOptions(): Promise<JwtModuleOptions> | JwtModuleOptions;
-}
-
-export interface JwtModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
-  useExisting?: Type<JwtOptionsFactory>;
-  useClass?: Type<JwtOptionsFactory>;
-  useFactory?: (...args: any[]) => Promise<JwtModuleOptions> | JwtModuleOptions;
-  inject?: any[];
 }
 
 export interface JwtSignOptions extends jwt.SignOptions {
