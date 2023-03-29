@@ -16,6 +16,7 @@ export class JwtModule {
   static register(options: JwtModuleOptions): DynamicModule {
     return {
       module: JwtModule,
+      global: options.global,
       providers: createJwtProvider(options)
     };
   }
@@ -23,6 +24,7 @@ export class JwtModule {
   static registerAsync(options: JwtModuleAsyncOptions): DynamicModule {
     return {
       module: JwtModule,
+      global: options.global,
       imports: options.imports || [],
       providers: this.createAsyncProviders(options)
     };

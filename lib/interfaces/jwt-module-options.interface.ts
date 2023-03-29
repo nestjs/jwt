@@ -7,6 +7,7 @@ export enum JwtSecretRequestType {
 }
 
 export interface JwtModuleOptions {
+  global?: boolean;
   signOptions?: jwt.SignOptions;
   secret?: string | Buffer;
   publicKey?: string | Buffer;
@@ -28,6 +29,7 @@ export interface JwtOptionsFactory {
 }
 
 export interface JwtModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
+  global?: boolean;
   useExisting?: Type<JwtOptionsFactory>;
   useClass?: Type<JwtOptionsFactory>;
   useFactory?: (...args: any[]) => Promise<JwtModuleOptions> | JwtModuleOptions;
