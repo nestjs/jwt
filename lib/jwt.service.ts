@@ -42,7 +42,7 @@ export class JwtService {
       signOptKeys.some((k) => !allowedSignOptKeys.includes(k))
     ) {
       throw new Error(
-        'Not allowed payload as string with these sign options: ' +
+        'Payload as string is not allowed with the following sign options: ' +
           signOptKeys.join(', ')
       );
     }
@@ -80,7 +80,7 @@ export class JwtService {
       signOptKeys.some((k) => !allowedSignOptKeys.includes(k))
     ) {
       throw new Error(
-        'Not allowed payload as string with these sign options: ' +
+        'Payload as string is not allowed with the following sign options: ' +
           signOptKeys.join(', ')
       );
     }

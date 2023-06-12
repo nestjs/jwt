@@ -343,7 +343,7 @@ describe('JWT Service', () => {
         // @ts-expect-error
         jwtService.sign(testPayloadStr, { expiresIn: 60 })
       ).toThrowError(
-        'Not allowed payload as string with these sign options: expiresIn'
+        'Payload as string is not allowed with the following sign options: expiresIn'
       );
     });
 
@@ -352,7 +352,7 @@ describe('JWT Service', () => {
         // @ts-expect-error
         jwtService.signAsync(testPayloadStr, { notBefore: 60 })
       ).toThrowError(
-        'Not allowed payload as string with these sign options: expiresIn, notBefore'
+        'Payload as string is not allowed with the following sign options: expiresIn, notBefore'
       );
     });
 
@@ -368,13 +368,13 @@ describe('JWT Service', () => {
 
     it('should "sign" expect errors using "payload" string with already defined invalid sign options', () => {
       expect(() => jwtService.sign(testPayloadStr)).toThrowError(
-        'Not allowed payload as string with these sign options: expiresIn'
+        'Payload as string is not allowed with the following sign options: expiresIn'
       );
     });
 
     it('should "signAsync" expect errors using "payload" string with already defined invalid sign options', () => {
       expect(() => jwtService.signAsync(testPayloadStr)).toThrowError(
-        'Not allowed payload as string with these sign options: expiresIn'
+        'Payload as string is not allowed with the following sign options: expiresIn'
       );
     });
   });
