@@ -19,7 +19,7 @@
     "prepare": "husky install"
   },
   "peerDependencies": {
-    "@nestjs/common": "^8.0.0 || ^9.0.0"
+    "@nestjs/common": "^8.0.0 || ^9.0.0 || ^10.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "17.6.5",
