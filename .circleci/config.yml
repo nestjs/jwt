@@ -3,26 +3,26 @@ version: 2
 aliases:
   - &restore-cache
     restore_cache:
-        key: dependency-cache-{{ checksum "package.json" }}
+      key: dependency-cache-{{ checksum "package.json" }}
   - &install-deps
     run:
-        name: Install dependencies
-        command: npm ci
+      name: Install dependencies
+      command: npm ci
   - &build-packages
     run:
-        name: Build
-        command: npm run build
+      name: Build
+      command: npm run build
 
 jobs:
   build:
     working_directory: ~/nest
     docker:
-      - image: cimg/node:17.9
+      - image: cimg/node:20.2
     steps:
       - checkout
       - run:
-          name: Use NPM v8
-          command: npm install -g npm@^8
+          name: Update NPM version
+          command: sudo npm install -g npm@latest
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -34,11 +34,11 @@ jobs:
             - ./node_modules
       - run:
           name: Build
-          command: npm run build    
+          command: npm run build
   test:
     working_directory: ~/nest
     docker:
-      - image: cimg/node:17.9
+      - image: cimg/node:20.2
     steps:
       - checkout
       - *restore-cache
@@ -55,4 +55,3 @@ workflows:
       - test:
           requires:
             - build
-      
