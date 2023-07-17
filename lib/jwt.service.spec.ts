@@ -340,7 +340,7 @@ describe('JWT Service', () => {
 
     it('should "sign" expect errors with a "payload" string with "expiresIn"', () => {
       expect(() =>
-        jwtService.sign(testPayloadStr, { expiresIn: 60 } as jwt.SignOptions)
+        jwtService.sign(testPayloadStr, { expiresIn: 60 })
       ).toThrowError(
         'Payload as string is not allowed with the following sign options: expiresIn'
       );
