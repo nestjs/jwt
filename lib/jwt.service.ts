@@ -18,11 +18,7 @@ export class JwtService {
     private readonly options: JwtModuleOptions = {}
   ) {}
 
-  sign(
-    payload: string,
-    options?: Omit<JwtSignOptions, keyof jwt.SignOptions>
-  ): string;
-  sign(payload: Buffer | object, options?: JwtSignOptions): string;
+  sign(payload: string | Buffer | object, options?: JwtSignOptions): string;
   sign(payload: string | Buffer | object, options?: JwtSignOptions): string {
     const signOptions = this.mergeJwtOptions(
       { ...options },
@@ -51,11 +47,7 @@ export class JwtService {
   }
 
   signAsync(
-    payload: string,
-    options?: Omit<JwtSignOptions, keyof jwt.SignOptions>
-  ): Promise<string>;
-  signAsync(
-    payload: Buffer | object,
+    payload: string | Buffer | object,
     options?: JwtSignOptions
   ): Promise<string>;
   signAsync(
