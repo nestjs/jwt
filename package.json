@@ -41,7 +41,7 @@
     "lint-staged": "14.0.1",
     "prettier": "3.0.2",
     "release-it": "16.1.5",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   },
   "dependencies": {
     "@types/jsonwebtoken": "9.0.2",
