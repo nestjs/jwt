@@ -123,11 +123,11 @@ export class JwtService {
     ) as Promise<T>;
   }
 
-  decode(
+  decode<T extends object = any>(
     token: string,
     options?: jwt.DecodeOptions
-  ): null | { [key: string]: any } | string {
-    return jwt.decode(token, options);
+  ): T {
+    return jwt.decode(token, options) as T;
   }
 
   private mergeJwtOptions(
