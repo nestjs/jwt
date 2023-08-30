@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@types/jsonwebtoken": "9.0.2",
-    "jsonwebtoken": "9.0.0"
+    "jsonwebtoken": "9.0.2"
   },
   "lint-staged": {
     "**/*.{ts,json}": []
