@@ -37,6 +37,7 @@
     "eslint-plugin-import": "2.28.1",
     "@nestjs/common": "10.2.3",
     "@types/node": "18.17.12",
+    "@types/jsonwebtoken": "^9.0.2",
     "husky": "8.0.3",
     "lint-staged": "14.0.1",
     "prettier": "3.0.3",
@@ -44,7 +45,6 @@
     "typescript": "5.2.2"
   },
   "dependencies": {
-    "@types/jsonwebtoken": "9.0.2",
     "jsonwebtoken": "^9.0.0"
   },
   "lint-staged": {
