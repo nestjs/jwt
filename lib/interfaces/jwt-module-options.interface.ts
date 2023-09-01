@@ -1,4 +1,4 @@
-import { ModuleMetadata, Type } from '@nestjs/common';
+import { ModuleMetadata, Provider, Type } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 
 export enum JwtSecretRequestType {
@@ -34,6 +34,7 @@ export interface JwtModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
   useClass?: Type<JwtOptionsFactory>;
   useFactory?: (...args: any[]) => Promise<JwtModuleOptions> | JwtModuleOptions;
   inject?: any[];
+  extraProviders?: Provider[];
 }
 
 export interface JwtSignOptions extends jwt.SignOptions {

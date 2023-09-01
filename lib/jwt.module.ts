@@ -26,7 +26,10 @@ export class JwtModule {
       module: JwtModule,
       global: options.global,
       imports: options.imports || [],
-      providers: this.createAsyncProviders(options)
+      providers: [
+        ...this.createAsyncProviders(options),
+        ...(options.extraProviders ?? [])
+      ]
     };
   }
 
