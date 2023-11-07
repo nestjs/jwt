@@ -44,7 +44,7 @@
     "typescript": "5.2.2"
   },
   "dependencies": {
-    "@types/jsonwebtoken": "9.0.2",
+    "@types/jsonwebtoken": "9.0.5",
     "jsonwebtoken": "9.0.2"
   },
   "lint-staged": {
