@@ -55,7 +55,8 @@ export class AuthService {
 
 ## Secret / Encryption Key options
 
-If you want to control secret and key management dynamically you can use the `secretOrKeyProvider` function for that purpose.
+If you want to control secret and key management dynamically you can use the `secretOrKeyProvider` function for that purpose. You also can use asynchronous version of `secretOrKeyProvider`.
+NOTE: For asynchronous version of `secretOrKeyProvider`, synchronous versions of `.sign()` and `.verify()` will throw an exception.
 
 ```typescript
 JwtModule.register({
@@ -153,6 +154,7 @@ The `JwtService` uses [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
 #### jwtService.sign(payload: string | Object | Buffer, options?: JwtSignOptions): string
 
 The sign method is an implementation of jsonwebtoken `.sign()`. Differing from jsonwebtoken it also allows an additional `secret`, `privateKey`, and `publicKey` properties on `options` to override options passed in from the module. It only overrides the `secret`, `publicKey` or `privateKey` though not a `secretOrKeyProvider`.
+NOTE: Will throw an exception for asynchronous version of `secretOrKeyProvider`;
 
 #### jwtService.signAsync(payload: string | Object | Buffer, options?: JwtSignOptions): Promise\<string\>
 
@@ -161,6 +163,7 @@ The asynchronous `.sign()` method.
 #### jwtService.verify\<T extends object = any>(token: string, options?: JwtVerifyOptions): T
 
 The verify method is an implementation of jsonwebtoken `.verify()`. Differing from jsonwebtoken it also allows an additional `secret`, `privateKey`, and `publicKey` properties on `options` to override options passed in from the module. It only overrides the `secret`, `publicKey` or `privateKey` though not a `secretOrKeyProvider`.
+NOTE: Will throw an exception for asynchronous version of `secretOrKeyProvider`;
 
 #### jwtService.verifyAsync\<T extends object = any>(token: string, options?: JwtVerifyOptions): Promise\<T\>
 
@@ -173,7 +176,7 @@ The decode method is an implementation of jsonwebtoken `.decode()`.
 The `JwtModule` takes an `options` object:
 
 - `secret` is either a string, buffer, or object containing the secret for HMAC algorithms
-- `secretOrKeyProvider` function with the following signature `(requestType, tokenOrPayload, options?) => jwt.Secret` (allows generating either secrets or keys dynamically)
+- `secretOrKeyProvider` function with the following signature `(requestType, tokenOrPayload, options?) => jwt.Secret | Promise<jwt.Secret>` (allows generating either secrets or keys dynamically)
 - `signOptions` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
 - `privateKey` PEM encoded private key for RSA and ECDSA with passphrase an object `{ key, passphrase }` [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
 - `publicKey` PEM encoded public key for RSA and ECDSA

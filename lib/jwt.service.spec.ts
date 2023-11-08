@@ -6,6 +6,7 @@ import {
 } from './interfaces/jwt-module-options.interface';
 import { JwtModule } from './jwt.module';
 import { JwtService } from './jwt.service';
+import { WrongSecretProviderError } from './jwt.errors';
 
 const setup = async (config: JwtModuleOptions) => {
   const module = await Test.createTestingModule({

@@ -20,7 +20,7 @@ export interface JwtModuleOptions {
     requestType: JwtSecretRequestType,
     tokenOrPayload: string | object | Buffer,
     options?: jwt.VerifyOptions | jwt.SignOptions
-  ) => jwt.Secret;
+  ) => jwt.Secret | Promise<jwt.Secret>;
   verifyOptions?: jwt.VerifyOptions;
 }
 
@@ -46,3 +46,5 @@ export interface JwtVerifyOptions extends jwt.VerifyOptions {
   secret?: string | Buffer;
   publicKey?: string | Buffer;
 }
+
+export type GetSecretKeyResult = string | Buffer | jwt.Secret;

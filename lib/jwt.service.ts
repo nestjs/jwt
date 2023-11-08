@@ -1,12 +1,14 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import {
+  GetSecretKeyResult,
   JwtModuleOptions,
   JwtSecretRequestType,
   JwtSignOptions,
   JwtVerifyOptions
 } from './interfaces';
 import { JWT_MODULE_OPTIONS } from './jwt.constants';
+import { WrongSecretProviderError } from './jwt.errors';
 
 @Injectable()
 export class JwtService {
@@ -34,6 +36,14 @@ export class JwtService {
       'privateKey',
       JwtSecretRequestType.SIGN
     );
+
+    if (secret instanceof Promise) {
+      secret.catch(() => {}); // suppress rejection from async provider
+      this.logger.warn(
+        'For async version of "secretOrKeyProvider", please use "signAsync".'
+      );
+      throw new WrongSecretProviderError();
+    }
 
     const allowedSignOptKeys = ['secret', 'privateKey'];
     const signOptKeys = Object.keys(signOptions);
@@ -86,9 +96,13 @@ export class JwtService {
     }
 
     return new Promise((resolve, reject) =>
-      jwt.sign(payload, secret, signOptions, (err, encoded) =>
-        err ? reject(err) : resolve(encoded)
-      )
+      Promise.resolve()
+        .then(() => secret)
+        .then((scrt: GetSecretKeyResult) => {
+          jwt.sign(payload, scrt, signOptions, (err, encoded) =>
+            err ? reject(err) : resolve(encoded)
+          )
+        })
     );
   }
 
@@ -100,6 +114,14 @@ export class JwtService {
       'publicKey',
       JwtSecretRequestType.VERIFY
     );
+
+    if (secret instanceof Promise) {
+      secret.catch(() => {}); // suppress rejection from async provider
+      this.logger.warn(
+        'For async version of "secretOrKeyProvider", please use "verifyAsync".'
+      );
+      throw new WrongSecretProviderError();
+    }
 
     return jwt.verify(token, secret, verifyOptions) as T;
   }
@@ -117,9 +139,14 @@ export class JwtService {
     );
 
     return new Promise((resolve, reject) =>
-      jwt.verify(token, secret, verifyOptions, (err, decoded) =>
-        err ? reject(err) : resolve(decoded as T)
-      )
+      Promise.resolve()
+        .then(() => secret)
+        .then((scrt: GetSecretKeyResult) => {
+          jwt.verify(token, scrt, verifyOptions, (err, decoded) =>
+            err ? reject(err) : resolve(decoded as T)
+          )
+        })
+        .catch(reject)
     ) as Promise<T>;
   }
 
@@ -148,13 +175,24 @@ export class JwtService {
       : this.options[key];
   }
 
+  private overrideSecretFromOptions(secret: GetSecretKeyResult) {
+    if (this.options.secretOrPrivateKey) {
+      this.logger.warn(
+        `"secretOrPrivateKey" has been deprecated, please use the new explicit "secret" or use "secretOrKeyProvider" or "privateKey"/"publicKey" exclusively.`
+      );
+      secret = this.options.secretOrPrivateKey;
+    }
+
+    return secret;
+  }
+
   private getSecretKey(
     token: string | object | Buffer,
     options: JwtVerifyOptions | JwtSignOptions,
     key: 'publicKey' | 'privateKey',
     secretRequestType: JwtSecretRequestType
-  ): string | Buffer | jwt.Secret {
-    let secret = this.options.secretOrKeyProvider
+  ): GetSecretKeyResult | Promise<GetSecretKeyResult> {
+    const secret = this.options.secretOrKeyProvider
       ? this.options.secretOrKeyProvider(secretRequestType, token, options)
       : options?.secret ||
         this.options.secret ||
@@ -164,12 +202,8 @@ export class JwtService {
             this.options.publicKey) ||
         this.options[key];
 
-    if (this.options.secretOrPrivateKey) {
-      this.logger.warn(
-        `"secretOrPrivateKey" has been deprecated, please use the new explicit "secret" or use "secretOrKeyProvider" or "privateKey"/"publicKey" exclusively.`
-      );
-      secret = this.options.secretOrPrivateKey;
-    }
-    return secret;
+    return secret instanceof Promise
+      ? secret.then((sec) => this.overrideSecretFromOptions(sec))
+      : this.overrideSecretFromOptions(secret);
   }
 }
