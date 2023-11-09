@@ -123,7 +123,7 @@ export class JwtService {
     ) as Promise<T>;
   }
 
-  decode<T extends object = any>(
+  decode<T = any>(
     token: string,
     options?: jwt.DecodeOptions
   ): T {
