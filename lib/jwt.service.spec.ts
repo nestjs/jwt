@@ -341,7 +341,6 @@ describe('JWT Service', () => {
 
     it('should "sign" expect errors with a "payload" string with "expiresIn"', () => {
       expect(() =>
-        // @ts-expect-error
         jwtService.sign(testPayloadStr, { expiresIn: 60 })
       ).toThrowError(
         'Payload as string is not allowed with the following sign options: expiresIn'
@@ -350,7 +349,6 @@ describe('JWT Service', () => {
 
     it('should "signAsync" expect errors with a "payload" string with "notBefore"', () => {
       expect(() =>
-        // @ts-expect-error
         jwtService.signAsync(testPayloadStr, { notBefore: 60 })
       ).toThrowError(
         'Payload as string is not allowed with the following sign options: expiresIn, notBefore'
