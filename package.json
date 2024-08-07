@@ -31,7 +31,7 @@
     "@types/node": "20.14.14",
     "@typescript-eslint/eslint-plugin": "8.0.1",
     "@typescript-eslint/parser": "8.0.1",
-    "eslint": "8.57.0",
+    "eslint": "9.8.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "2.29.1",
     "husky": "9.1.4",
