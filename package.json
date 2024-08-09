@@ -28,7 +28,7 @@
     "@nestjs/core": "10.3.10",
     "@nestjs/testing": "10.3.10",
     "@types/jest": "29.5.12",
-    "@types/node": "20.14.14",
+    "@types/node": "20.14.15",
     "@typescript-eslint/eslint-plugin": "8.0.1",
     "@typescript-eslint/parser": "8.0.1",
     "eslint": "8.57.0",
