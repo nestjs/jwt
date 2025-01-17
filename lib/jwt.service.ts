@@ -101,7 +101,7 @@ export class JwtService {
         .then((scrt: GetSecretKeyResult) => {
           jwt.sign(payload, scrt, signOptions, (err, encoded) =>
             err ? reject(err) : resolve(encoded)
-          )
+          );
         })
     );
   }
@@ -144,16 +144,13 @@ export class JwtService {
         .then((scrt: GetSecretKeyResult) => {
           jwt.verify(token, scrt, verifyOptions, (err, decoded) =>
             err ? reject(err) : resolve(decoded as T)
-          )
+          );
         })
         .catch(reject)
-    ) as Promise<T>;
+    );
   }
 
-  decode<T = any>(
-    token: string,
-    options?: jwt.DecodeOptions
-  ): T {
+  decode<T = any>(token: string, options?: jwt.DecodeOptions): T {
     return jwt.decode(token, options) as T;
   }
 

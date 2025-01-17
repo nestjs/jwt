@@ -6,7 +6,6 @@ import {
 } from './interfaces/jwt-module-options.interface';
 import { JwtModule } from './jwt.module';
 import { JwtService } from './jwt.service';
-import { WrongSecretProviderError } from './jwt.errors';
 
 const setup = async (config: JwtModuleOptions) => {
   const module = await Test.createTestingModule({
@@ -24,23 +23,23 @@ const config = {
   privateKey: 'private_key'
 };
 
-describe('JWT Service', () => {
+describe('JwtService', () => {
   let verifySpy: jest.SpyInstance;
   let signSpy: jest.SpyInstance;
-  let getRandomString = () => `${Date.now()}`;
+  const getRandomString = () => `${Date.now()}`;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     signSpy = jest
       .spyOn(jwt, 'sign')
-      .mockImplementation((token, secret, options, callback) => {
-        const result = 'signed_' + token + '_by_' + secret;
+      .mockImplementation((token: string, secret, options, callback) => {
+        const result = 'signed_' + token + '_by_' + (secret as string);
         return callback ? callback(null, result) : result;
       });
 
     verifySpy = jest
       .spyOn(jwt, 'verify')
       .mockImplementation((token, secret, options, callback) => {
-        const result = 'verified_' + token + '_by_' + secret;
+        const result = 'verified_' + token + '_by_' + (secret as string);
         return callback ? callback(null, result as any) : result;
       });
   });
@@ -52,14 +51,14 @@ describe('JWT Service', () => {
 
   describe('should use config.secretOrKeyProvider', () => {
     let jwtService: JwtService;
-    let testPayload: string = getRandomString();
+    const testPayload: string = getRandomString();
 
     beforeAll(async () => {
       jwtService = await setup(config);
     });
 
-    it('signing should use config.secretOrKeyProvider', async () => {
-      expect(await jwtService.sign(testPayload)).toBe(
+    it('signing should use config.secretOrKeyProvider', () => {
+      expect(jwtService.sign(testPayload)).toBe(
         `signed_${testPayload}_by_sign_secret`
       );
     });
@@ -85,14 +84,14 @@ describe('JWT Service', () => {
 
   describe('should use config.secret', () => {
     let jwtService: JwtService;
-    let testPayload: string = getRandomString();
+    const testPayload: string = getRandomString();
 
     beforeAll(async () => {
       jwtService = await setup({ ...config, secretOrKeyProvider: undefined });
     });
 
-    it('signing should use config.secret', async () => {
-      expect(await jwtService.sign(testPayload)).toBe(
+    it('signing should use config.secret', () => {
+      expect(jwtService.sign(testPayload)).toBe(
         `signed_${testPayload}_by_default_secret`
       );
     });
@@ -118,7 +117,7 @@ describe('JWT Service', () => {
 
   describe('should use config.privateKey and config.publicKey', () => {
     let jwtService: JwtService;
-    let testPayload: string = getRandomString();
+    const testPayload: string = getRandomString();
 
     beforeAll(async () => {
       jwtService = await setup({
@@ -128,8 +127,8 @@ describe('JWT Service', () => {
       });
     });
 
-    it('signing should use config.privateKey', async () => {
-      expect(await jwtService.sign(testPayload)).toBe(
+    it('signing should use config.privateKey', () => {
+      expect(jwtService.sign(testPayload)).toBe(
         `signed_${testPayload}_by_private_key`
       );
     });
@@ -156,7 +155,7 @@ describe('JWT Service', () => {
   describe('should use config.secretOrPrivateKey but warn about deprecation', () => {
     let jwtService: JwtService;
     let consoleWarnSpy: jest.SpyInstance;
-    let testPayload: string = getRandomString();
+    const testPayload: string = getRandomString();
 
     beforeAll(async () => {
       jwtService = await setup({
@@ -166,8 +165,8 @@ describe('JWT Service', () => {
       consoleWarnSpy = jest.spyOn(jwtService['logger'], 'warn');
     });
 
-    it('signing should use deprecated secretOrPrivateKey', async () => {
-      expect(await jwtService.sign(testPayload)).toBe(
+    it('signing should use deprecated secretOrPrivateKey', () => {
+      expect(jwtService.sign(testPayload)).toBe(
         `signed_${testPayload}_by_deprecated_key`
       );
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
@@ -194,7 +193,7 @@ describe('JWT Service', () => {
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       consoleWarnSpy.mockClear();
     });
   });
@@ -202,7 +201,7 @@ describe('JWT Service', () => {
   describe('should allow buffers for secrets', () => {
     let jwtService: JwtService;
     let secretB64: Buffer;
-    let testPayload = { foo: 'bar' };
+    const testPayload = { foo: 'bar' };
 
     beforeEach(async () => {
       secretB64 = Buffer.from('ThisIsARandomSecret', 'base64');
@@ -211,14 +210,14 @@ describe('JWT Service', () => {
       signSpy.mockRestore();
     });
 
-    it('verifying should use base64 buffer key', async () => {
-      let token = jwt.sign(testPayload, secretB64);
+    it('verifying should use base64 buffer key', () => {
+      const token = jwt.sign(testPayload, secretB64);
 
       expect(jwtService.verify(token)).toHaveProperty('foo', 'bar');
     });
 
     it('verifying (async) should use base64 buffer key', async () => {
-      let token = jwt.sign(testPayload, secretB64);
+      const token = jwt.sign(testPayload, secretB64);
 
       await expect(jwtService.verifyAsync(token)).resolves.toHaveProperty(
         'foo',
@@ -229,7 +228,7 @@ describe('JWT Service', () => {
 
   describe('should use secret key from options', () => {
     let jwtService: JwtService;
-    let testPayload: string = getRandomString();
+    const testPayload: string = getRandomString();
 
     beforeAll(async () => {
       jwtService = await setup({
@@ -238,10 +237,10 @@ describe('JWT Service', () => {
       });
     });
 
-    let secret = 'custom_secret';
+    const secret = 'custom_secret';
 
-    it('signing should use secret key from options', async () => {
-      expect(await jwtService.sign(testPayload, { secret })).toBe(
+    it('signing should use secret key from options', () => {
+      expect(jwtService.sign(testPayload, { secret })).toBe(
         `signed_${testPayload}_by_custom_secret`
       );
     });
@@ -267,7 +266,7 @@ describe('JWT Service', () => {
 
   describe('should use private/public key from options', () => {
     let jwtService: JwtService;
-    let testPayload: string = getRandomString();
+    const testPayload: string = getRandomString();
 
     beforeAll(async () => {
       jwtService = await setup({
@@ -277,11 +276,11 @@ describe('JWT Service', () => {
       });
     });
 
-    let privateKey = 'customPrivateKey';
-    let publicKey = 'customPublicKey';
+    const privateKey = 'customPrivateKey';
+    const publicKey = 'customPublicKey';
 
-    it('signing should use private key from options', async () => {
-      expect(await jwtService.sign(testPayload, { privateKey })).toBe(
+    it('signing should use private key from options', () => {
+      expect(jwtService.sign(testPayload, { privateKey })).toBe(
         `signed_${testPayload}_by_customPrivateKey`
       );
     });
@@ -307,7 +306,7 @@ describe('JWT Service', () => {
 
   describe('should not use invalid sign options', () => {
     let jwtService: JwtService;
-    let testPayloadStr: string = getRandomString();
+    const testPayloadStr: string = getRandomString();
 
     beforeAll(async () => {
       jwtService = await setup({ secretOrKeyProvider: undefined });
@@ -332,8 +331,8 @@ describe('JWT Service', () => {
     };
 
     let jwtService: JwtService;
-    let testPayloadStr: string = getRandomString();
-    let testPayloadObj: object = {};
+    const testPayloadStr: string = getRandomString();
+    const testPayloadObj: object = {};
 
     beforeAll(async () => {
       jwtService = await setup({ signOptions, secretOrKeyProvider: undefined });
