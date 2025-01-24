@@ -47,7 +47,7 @@
     "typescript-eslint": "8.21.0"
   },
   "dependencies": {
-    "@types/jsonwebtoken": "9.0.7",
+    "@types/jsonwebtoken": "9.0.8",
     "jsonwebtoken": "9.0.2"
   },
   "lint-staged": {
