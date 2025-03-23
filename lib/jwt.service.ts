@@ -10,6 +10,9 @@ import {
 import { JWT_MODULE_OPTIONS } from './jwt.constants';
 import { WrongSecretProviderError } from './jwt.errors';
 
+/**
+ * @publicApi
+ */
 @Injectable()
 export class JwtService {
   private readonly logger = new Logger('JwtService');
