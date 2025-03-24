@@ -8,6 +8,9 @@ import { JWT_MODULE_OPTIONS } from './jwt.constants';
 import { createJwtProvider } from './jwt.providers';
 import { JwtService } from './jwt.service';
 
+/**
+ * @publicApi
+ */
 @Module({
   providers: [JwtService],
   exports: [JwtService]
