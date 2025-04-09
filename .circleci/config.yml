@@ -35,7 +35,7 @@ jobs:
   test:
     working_directory: ~/nest
     docker:
-      - image: cimg/node:21.6
+      - image: cimg/node:21.7
     steps:
       - checkout
       - *restore-cache
