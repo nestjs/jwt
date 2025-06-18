@@ -1,3 +1,10 @@
+import {
+  createPrivateKey,
+  createPublicKey,
+  createSecretKey,
+  generateKeyPairSync,
+  KeyObject
+} from 'crypto';
 import { Test } from '@nestjs/testing';
 import * as jwt from 'jsonwebtoken';
 import {
@@ -152,6 +159,44 @@ describe('JwtService', () => {
     });
   });
 
+  describe('should allow KeyObject for privateKey and publicKey', () => {
+    const { privateKey, publicKey } = generateKeyPairSync('rsa', {
+      modulusLength: 2048,
+      publicKeyEncoding: { type: 'spki', format: 'pem' },
+      privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+    });
+    const privKeyAsObject: KeyObject = createPrivateKey(privateKey);
+    const pubKeyAsObject: KeyObject = createPublicKey(publicKey);
+    const testPayload = { foo: 'bar' };
+
+    let jwtService: JwtService;
+
+    beforeEach(async () => {
+      jwtService = await setup({
+        privateKey: privKeyAsObject,
+        publicKey: pubKeyAsObject,
+        signOptions: { algorithm: 'RS256' }
+      });
+      verifySpy.mockRestore();
+      signSpy.mockRestore();
+    });
+
+    it('verifying should work', () => {
+      const token = jwtService.sign(testPayload);
+
+      expect(jwtService.verify(token)).toHaveProperty('foo', 'bar');
+    });
+
+    it('verifying (async) should work', () => {
+      const token = jwtService.sign(testPayload);
+
+      expect(jwtService.verifyAsync(token)).resolves.toHaveProperty(
+        'foo',
+        'bar'
+      );
+    });
+  });
+
   describe('should use config.secretOrPrivateKey but warn about deprecation', () => {
     let jwtService: JwtService;
     let consoleWarnSpy: jest.SpyInstance;
@@ -205,6 +250,36 @@ describe('JwtService', () => {
 
     beforeEach(async () => {
       secretB64 = Buffer.from('ThisIsARandomSecret', 'base64');
+      jwtService = await setup({ secret: secretB64 });
+      verifySpy.mockRestore();
+      signSpy.mockRestore();
+    });
+
+    it('verifying should use base64 buffer key', () => {
+      const token = jwt.sign(testPayload, secretB64);
+
+      expect(jwtService.verify(token)).toHaveProperty('foo', 'bar');
+    });
+
+    it('verifying (async) should use base64 buffer key', async () => {
+      const token = jwt.sign(testPayload, secretB64);
+
+      await expect(jwtService.verifyAsync(token)).resolves.toHaveProperty(
+        'foo',
+        'bar'
+      );
+    });
+  });
+
+  describe('should allow KeyObject for secret', () => {
+    const secretB64: KeyObject = createSecretKey(
+      Buffer.from('ThisIsARandomSecret', 'base64')
+    );
+    const testPayload = { foo: 'bar' };
+
+    let jwtService: JwtService;
+
+    beforeEach(async () => {
       jwtService = await setup({ secret: secretB64 });
       verifySpy.mockRestore();
       signSpy.mockRestore();

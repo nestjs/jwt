@@ -12,8 +12,8 @@ export enum JwtSecretRequestType {
 export interface JwtModuleOptions {
   global?: boolean;
   signOptions?: jwt.SignOptions;
-  secret?: string | Buffer;
-  publicKey?: string | Buffer;
+  secret?: jwt.Secret;
+  publicKey?: jwt.Secret;
   privateKey?: jwt.Secret;
   /**
    * @deprecated
