@@ -182,6 +182,16 @@ The `JwtModule` takes an `options` object:
 - `verifyOptions` [read more](https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback)
 - `secretOrPrivateKey` (DEPRECATED!) [read more](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
 
+For performance purposes, it is advised to pass instances of `KeyObject` to `secret`, `privateKey` and `publicKey` properties of this `options` object. These `KeyObject` can be generated with `createSecretKey()`, `createPrivateKey()` and `createPublicKey()` from Node.js `crypto` module. For example:
+
+```typescript
+import { createSecretKey } from 'crypto';
+
+new JwtService({
+  secret: createSecretKey(Buffer.from('the secret key'))
+});
+```
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
