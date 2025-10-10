@@ -453,4 +453,64 @@ describe('JwtService', () => {
       );
     });
   });
+
+  describe('should properly handle generic types', () => {
+    let jwtService: JwtService;
+
+    // Define an interface for type safety testing
+    interface UserPayload {
+      id: number;
+      username: string;
+      roles: string[];
+    }
+
+    beforeAll(async () => {
+      jwtService = await setup({ secretOrKeyProvider: undefined });
+    });
+
+    it('should sign with correct interface implementation', () => {
+      const validPayload: UserPayload = {
+        id: 1,
+        username: 'testuser',
+        roles: ['user', 'admin']
+      };
+
+      // This should pass type checking
+      const token = jwtService.sign<UserPayload>(validPayload);
+      expect(token).toBeDefined();
+    });
+
+    it('should fail type checking with incorrect interface implementation', () => {
+      const invalidPayload = {
+        id: 1,
+        // Missing username property
+        roles: ['user']
+      };
+
+      // @ts-expect-error as the username property is not defined in the payload
+      jwtService.sign<UserPayload>(invalidPayload);
+    });
+
+    it('should signAsync with correct interface implementation', async () => {
+      const validPayload: UserPayload = {
+        id: 1,
+        username: 'testuser',
+        roles: ['user', 'admin']
+      };
+
+      const token = await jwtService.signAsync<UserPayload>(validPayload);
+      expect(token).toBeDefined();
+    });
+
+    it('should fail type checking with incorrect interface implementation for signAsync', async () => {
+      const invalidPayload = {
+        id: 1,
+        // Missing username property
+        roles: ['user']
+      };
+
+      // @ts-expect-error as the username property is not defined in the payload
+      await jwtService.signAsync<UserPayload>(invalidPayload);
+    });
+  });
 });
