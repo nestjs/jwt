@@ -128,7 +128,7 @@ export class JwtService {
       throw new WrongSecretProviderError();
     }
 
-    return jwt.verify(token, secret, verifyOptions) as T;
+    return jwt.verify(token, secret, verifyOptions as jwt.VerifyOptions) as T;
   }
 
   verifyAsync<T extends object = any>(
@@ -147,8 +147,11 @@ export class JwtService {
       Promise.resolve()
         .then(() => secret)
         .then((scrt: GetSecretKeyResult) => {
-          jwt.verify(token, scrt, verifyOptions, (err, decoded) =>
-            err ? reject(err) : resolve(decoded as T)
+          jwt.verify(
+            token,
+            scrt,
+            verifyOptions as jwt.VerifyOptions,
+            (err, decoded) => (err ? reject(err) : resolve(decoded as T))
           );
         })
         .catch(reject)
@@ -170,10 +173,7 @@ export class JwtService {
       delete (options as JwtVerifyOptions).publicKey;
     }
     return options
-      ? {
-          ...(this.options[key] || {}),
-          ...options
-        }
+      ? ({ ...(this.options[key] || {}), ...options } as jwt.VerifyOptions)
       : this.options[key];
   }
 

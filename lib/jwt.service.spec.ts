@@ -1,3 +1,4 @@
+import { Test } from '@nestjs/testing';
 import {
   createPrivateKey,
   createPublicKey,
@@ -5,7 +6,6 @@ import {
   generateKeyPairSync,
   KeyObject
 } from 'crypto';
-import { Test } from '@nestjs/testing';
 import * as jwt from 'jsonwebtoken';
 import {
   JwtModuleOptions,
@@ -306,10 +306,7 @@ describe('JwtService', () => {
     const testPayload: string = getRandomString();
 
     beforeAll(async () => {
-      jwtService = await setup({
-        ...config,
-        secretOrKeyProvider: undefined
-      });
+      jwtService = await setup({ ...config, secretOrKeyProvider: undefined });
     });
 
     const secret = 'custom_secret';
@@ -401,9 +398,7 @@ describe('JwtService', () => {
   });
 
   describe('should use invalid sign options', () => {
-    const signOptions: jwt.SignOptions = {
-      expiresIn: '1d'
-    };
+    const signOptions: jwt.SignOptions = { expiresIn: '1d' };
 
     let jwtService: JwtService;
     const testPayloadStr: string = getRandomString();
@@ -417,7 +412,7 @@ describe('JwtService', () => {
       expect(() =>
         // @ts-expect-error
         jwtService.sign(testPayloadStr, { expiresIn: 60 })
-      ).toThrowError(
+      ).toThrow(
         'Payload as string is not allowed with the following sign options: expiresIn'
       );
     });
@@ -426,7 +421,7 @@ describe('JwtService', () => {
       expect(() =>
         // @ts-expect-error
         jwtService.signAsync(testPayloadStr, { notBefore: 60 })
-      ).toThrowError(
+      ).toThrow(
         'Payload as string is not allowed with the following sign options: expiresIn, notBefore'
       );
     });
@@ -442,13 +437,13 @@ describe('JwtService', () => {
     });
 
     it('should "sign" expect errors using "payload" string with already defined invalid sign options', () => {
-      expect(() => jwtService.sign(testPayloadStr)).toThrowError(
+      expect(() => jwtService.sign(testPayloadStr)).toThrow(
         'Payload as string is not allowed with the following sign options: expiresIn'
       );
     });
 
     it('should "signAsync" expect errors using "payload" string with already defined invalid sign options', () => {
-      expect(() => jwtService.signAsync(testPayloadStr)).toThrowError(
+      expect(() => jwtService.signAsync(testPayloadStr)).toThrow(
         'Payload as string is not allowed with the following sign options: expiresIn'
       );
     });
