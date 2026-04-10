@@ -43,7 +43,7 @@
     "release-it": "19.2.4",
     "rxjs": "7.8.2",
     "ts-jest": "29.4.9",
-    "typescript": "5.9.3",
+    "typescript": "6.0.2",
     "typescript-eslint": "8.58.1"
   },
   "dependencies": {
