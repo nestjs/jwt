@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "bundler",
     "declaration": true,
     "noImplicitAny": false,
     "removeComments": true,
@@ -11,7 +12,9 @@
     "sourceMap": false,
     "outDir": "./dist",
     "rootDir": "./lib",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node"],
+    "strict": false
   },
   "include": [
     "lib/**/*",

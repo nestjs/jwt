@@ -1,3 +1,19 @@
+import { vi, describe, it, expect, beforeEach, afterEach, beforeAll, type MockInstance } from 'vitest';
+
+vi.mock('jsonwebtoken', async (importOriginal) => {
+  const mod = await importOriginal<typeof import('jsonwebtoken')>();
+  return {
+    __esModule: true,
+    default: mod,
+    sign: mod.sign,
+    verify: mod.verify,
+    decode: mod.decode,
+    JsonWebTokenError: mod.JsonWebTokenError,
+    NotBeforeError: mod.NotBeforeError,
+    TokenExpiredError: mod.TokenExpiredError,
+  };
+});
+
 import { Test } from '@nestjs/testing';
 import {
   createPrivateKey,
@@ -31,19 +47,19 @@ const config = {
 };
 
 describe('JwtService', () => {
-  let verifySpy: jest.SpyInstance;
-  let signSpy: jest.SpyInstance;
+  let verifySpy: MockInstance;
+  let signSpy: MockInstance;
   const getRandomString = () => `${Date.now()}`;
 
   beforeEach(() => {
-    signSpy = jest
+    signSpy = vi
       .spyOn(jwt, 'sign')
       .mockImplementation((token: string, secret, options, callback) => {
         const result = 'signed_' + token + '_by_' + (secret as string);
         return callback ? callback(null, result) : result;
       });
 
-    verifySpy = jest
+    verifySpy = vi
       .spyOn(jwt, 'verify')
       .mockImplementation((token, secret, options, callback) => {
         const result = 'verified_' + token + '_by_' + (secret as string);
@@ -187,10 +203,10 @@ describe('JwtService', () => {
       expect(jwtService.verify(token)).toHaveProperty('foo', 'bar');
     });
 
-    it('verifying (async) should work', () => {
+    it('verifying (async) should work', async () => {
       const token = jwtService.sign(testPayload);
 
-      expect(jwtService.verifyAsync(token)).resolves.toHaveProperty(
+      await expect(jwtService.verifyAsync(token)).resolves.toHaveProperty(
         'foo',
         'bar'
       );
@@ -199,7 +215,7 @@ describe('JwtService', () => {
 
   describe('should use config.secretOrPrivateKey but warn about deprecation', () => {
     let jwtService: JwtService;
-    let consoleWarnSpy: jest.SpyInstance;
+    let consoleWarnSpy: MockInstance;
     const testPayload: string = getRandomString();
 
     beforeAll(async () => {
@@ -207,7 +223,7 @@ describe('JwtService', () => {
         ...config,
         secretOrPrivateKey: 'deprecated_key'
       });
-      consoleWarnSpy = jest.spyOn(jwtService['logger'], 'warn');
+      consoleWarnSpy = vi.spyOn(jwtService['logger'], 'warn');
     });
 
     it('signing should use deprecated secretOrPrivateKey', () => {
