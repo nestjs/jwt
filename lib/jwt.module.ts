@@ -3,10 +3,10 @@ import {
   JwtModuleAsyncOptions,
   JwtModuleOptions,
   JwtOptionsFactory
-} from './interfaces/jwt-module-options.interface';
-import { JWT_MODULE_OPTIONS } from './jwt.constants';
-import { createJwtProvider } from './jwt.providers';
-import { JwtService } from './jwt.service';
+} from './interfaces/jwt-module-options.interface.js';
+import { JWT_MODULE_OPTIONS } from './jwt.constants.js';
+import { createJwtProvider } from './jwt.providers.js';
+import { JwtService } from './jwt.service.js';
 
 /**
  * @publicApi
