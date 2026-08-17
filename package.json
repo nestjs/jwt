@@ -5,13 +5,13 @@
   "description": "Nest - modern, fast, powerful node.js web framework (@jwt)",
   "author": "Kamil Mysliwiec",
   "license": "MIT",
-  "main": "./index.js",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./index.js",
-      "default": "./index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
