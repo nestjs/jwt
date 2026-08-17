@@ -6,9 +6,9 @@ import {
   JwtSecretRequestType,
   JwtSignOptions,
   JwtVerifyOptions
-} from './interfaces';
-import { JWT_MODULE_OPTIONS } from './jwt.constants';
-import { WrongSecretProviderError } from './jwt.errors';
+} from './interfaces/index.js';
+import { JWT_MODULE_OPTIONS } from './jwt.constants.js';
+import { WrongSecretProviderError } from './jwt.errors.js';
 
 /**
  * @publicApi

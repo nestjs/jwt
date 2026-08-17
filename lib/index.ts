@@ -1,7 +1,7 @@
-export * from './interfaces';
-export * from './jwt.errors';
-export * from './jwt.module';
-export * from './jwt.service';
+export * from './interfaces/index.js';
+export * from './jwt.errors.js';
+export * from './jwt.module.js';
+export * from './jwt.service.js';
 export {
   TokenExpiredError,
   NotBeforeError,

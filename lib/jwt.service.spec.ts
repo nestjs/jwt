@@ -26,9 +26,9 @@ import * as jwt from 'jsonwebtoken';
 import {
   JwtModuleOptions,
   JwtSecretRequestType
-} from './interfaces/jwt-module-options.interface';
-import { JwtModule } from './jwt.module';
-import { JwtService } from './jwt.service';
+} from './interfaces/jwt-module-options.interface.js';
+import { JwtModule } from './jwt.module.js';
+import { JwtService } from './jwt.service.js';
 
 const setup = async (config: JwtModuleOptions) => {
   const module = await Test.createTestingModule({

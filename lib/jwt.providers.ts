@@ -1,5 +1,5 @@
-import { JwtModuleOptions } from './interfaces/jwt-module-options.interface';
-import { JWT_MODULE_OPTIONS } from './jwt.constants';
+import { JwtModuleOptions } from './interfaces/jwt-module-options.interface.js';
+import { JWT_MODULE_OPTIONS } from './jwt.constants.js';
 
 /**
  * @publicApi
