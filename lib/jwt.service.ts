@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
+import type * as jwt from 'jsonwebtoken';
 import {
   GetSecretKeyResult,
   JwtModuleOptions,
@@ -61,7 +62,7 @@ export class JwtService {
       );
     }
 
-    return jwt.sign(payload, secret, signOptions);
+    return jsonwebtoken.sign(payload, secret, signOptions);
   }
 
   signAsync(
@@ -104,7 +105,7 @@ export class JwtService {
       Promise.resolve()
         .then(() => secret)
         .then((scrt: GetSecretKeyResult) => {
-          jwt.sign(payload, scrt, signOptions, (err, encoded) =>
+          jsonwebtoken.sign(payload, scrt, signOptions, (err, encoded) =>
             err ? reject(err) : resolve(encoded)
           );
         })
@@ -128,7 +129,11 @@ export class JwtService {
       throw new WrongSecretProviderError();
     }
 
-    return jwt.verify(token, secret, verifyOptions as jwt.VerifyOptions) as T;
+    return jsonwebtoken.verify(
+      token,
+      secret,
+      verifyOptions as jwt.VerifyOptions
+    ) as T;
   }
 
   verifyAsync<T extends object = any>(
@@ -147,7 +152,7 @@ export class JwtService {
       Promise.resolve()
         .then(() => secret)
         .then((scrt: GetSecretKeyResult) => {
-          jwt.verify(
+          jsonwebtoken.verify(
             token,
             scrt,
             verifyOptions as jwt.VerifyOptions,
@@ -159,7 +164,7 @@ export class JwtService {
   }
 
   decode<T = any>(token: string, options?: jwt.DecodeOptions): T {
-    return jwt.decode(token, options) as T;
+    return jsonwebtoken.decode(token, options) as T;
   }
 
   private mergeJwtOptions(

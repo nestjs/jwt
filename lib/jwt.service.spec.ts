@@ -1,18 +1,13 @@
-import { vi, describe, it, expect, beforeEach, afterEach, beforeAll, type MockInstance } from 'vitest';
-
-vi.mock('jsonwebtoken', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('jsonwebtoken')>();
-  return {
-    __esModule: true,
-    default: mod,
-    sign: mod.sign,
-    verify: mod.verify,
-    decode: mod.decode,
-    JsonWebTokenError: mod.JsonWebTokenError,
-    NotBeforeError: mod.NotBeforeError,
-    TokenExpiredError: mod.TokenExpiredError,
-  };
-});
+import {
+  vi,
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  beforeAll,
+  type MockInstance
+} from 'vitest';
 
 import { Test } from '@nestjs/testing';
 import {
@@ -22,7 +17,8 @@ import {
   generateKeyPairSync,
   KeyObject
 } from 'crypto';
-import * as jwt from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
+import type * as jwt from 'jsonwebtoken';
 import {
   JwtModuleOptions,
   JwtSecretRequestType
@@ -53,14 +49,14 @@ describe('JwtService', () => {
 
   beforeEach(() => {
     signSpy = vi
-      .spyOn(jwt, 'sign')
+      .spyOn(jsonwebtoken, 'sign')
       .mockImplementation((token: string, secret, options, callback) => {
         const result = 'signed_' + token + '_by_' + (secret as string);
         return callback ? callback(null, result) : result;
       });
 
     verifySpy = vi
-      .spyOn(jwt, 'verify')
+      .spyOn(jsonwebtoken, 'verify')
       .mockImplementation((token, secret, options, callback) => {
         const result = 'verified_' + token + '_by_' + (secret as string);
         return callback ? callback(null, result as any) : result;
@@ -272,13 +268,13 @@ describe('JwtService', () => {
     });
 
     it('verifying should use base64 buffer key', () => {
-      const token = jwt.sign(testPayload, secretB64);
+      const token = jsonwebtoken.sign(testPayload, secretB64);
 
       expect(jwtService.verify(token)).toHaveProperty('foo', 'bar');
     });
 
     it('verifying (async) should use base64 buffer key', async () => {
-      const token = jwt.sign(testPayload, secretB64);
+      const token = jsonwebtoken.sign(testPayload, secretB64);
 
       await expect(jwtService.verifyAsync(token)).resolves.toHaveProperty(
         'foo',
@@ -302,13 +298,13 @@ describe('JwtService', () => {
     });
 
     it('verifying should use base64 buffer key', () => {
-      const token = jwt.sign(testPayload, secretB64);
+      const token = jsonwebtoken.sign(testPayload, secretB64);
 
       expect(jwtService.verify(token)).toHaveProperty('foo', 'bar');
     });
 
     it('verifying (async) should use base64 buffer key', async () => {
-      const token = jwt.sign(testPayload, secretB64);
+      const token = jsonwebtoken.sign(testPayload, secretB64);
 
       await expect(jwtService.verifyAsync(token)).resolves.toHaveProperty(
         'foo',
