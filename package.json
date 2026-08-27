@@ -30,14 +30,14 @@
     "prepare": "husky"
   },
   "peerDependencies": {
-    "@nestjs/common": "^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0"
+    "@nestjs/common": "^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "21.2.2",
     "@commitlint/config-angular": "21.2.2",
-    "@nestjs/common": "11.2.3",
-    "@nestjs/core": "11.2.3",
-    "@nestjs/testing": "11.2.3",
+    "@nestjs/common": "12.0.1",
+    "@nestjs/core": "12.0.1",
+    "@nestjs/testing": "12.0.1",
     "@types/node": "24.13.3",
     "husky": "9.1.7",
     "lint-staged": "17.3.0",
