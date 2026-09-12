@@ -520,4 +520,51 @@ describe('JwtService', () => {
       await jwtService.signAsync<UserPayload>(invalidPayload);
     });
   });
+
+  describe('decode', () => {
+    let jwtService: JwtService;
+    let validToken: string;
+
+    interface UserPayload {
+      id: number;
+      username: string;
+    }
+
+    beforeAll(async () => {
+      jwtService = await setup(config);
+      validToken = jsonwebtoken.sign(
+        { id: 101, username: 'john_doe' },
+        'default_secret'
+      );
+    });
+
+    it('should decode token payload without complete option', () => {
+      const decoded = jwtService.decode<UserPayload>(validToken);
+      expect(decoded).toBeDefined();
+      expect(decoded?.id).toBe(101);
+      expect(decoded?.username).toBe('john_doe');
+    });
+
+    it('should return complete decoded object with header, payload, and signature when complete: true', () => {
+      const decoded = jwtService.decode(validToken, { complete: true });
+      expect(decoded).toBeDefined();
+      expect(decoded).not.toBeNull();
+      expect(decoded).toHaveProperty('header');
+      expect(decoded).toHaveProperty('payload');
+      expect(decoded).toHaveProperty('signature');
+      expect(decoded!.header.alg).toBe('HS256');
+      expect((decoded!.payload as UserPayload).username).toBe('john_doe');
+    });
+
+    it('should return null when decoding invalid or malformed token', () => {
+      const decoded = jwtService.decode('invalid.token.here');
+      expect(decoded).toBeNull();
+    });
+
+    it('should pass options properly when provided to decode', () => {
+      const decoded = jwtService.decode(validToken, { json: true });
+      expect(decoded).toBeDefined();
+      expect(decoded.username).toBe('john_doe');
+    });
+  });
 });
