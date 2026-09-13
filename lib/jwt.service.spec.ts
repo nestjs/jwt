@@ -3,6 +3,7 @@ import {
   describe,
   it,
   expect,
+  expectTypeOf,
   beforeEach,
   afterEach,
   beforeAll,
@@ -540,20 +541,27 @@ describe('JwtService', () => {
 
     it('should decode token payload without complete option', () => {
       const decoded = jwtService.decode<UserPayload>(validToken);
-      expect(decoded).toBeDefined();
-      expect(decoded?.id).toBe(101);
-      expect(decoded?.username).toBe('john_doe');
+      expect(decoded).not.toBeNull();
+      expect(decoded.id).toBe(101);
+      expect(decoded.username).toBe('john_doe');
+
+      expectTypeOf(jwtService.decode<UserPayload>(validToken)).toEqualTypeOf<UserPayload>();
+      expectTypeOf(jwtService.decode(validToken)).toBeAny();
     });
 
     it('should return complete decoded object with header, payload, and signature when complete: true', () => {
       const decoded = jwtService.decode(validToken, { complete: true });
-      expect(decoded).toBeDefined();
       expect(decoded).not.toBeNull();
-      expect(decoded).toHaveProperty('header');
-      expect(decoded).toHaveProperty('payload');
-      expect(decoded).toHaveProperty('signature');
-      expect(decoded!.header.alg).toBe('HS256');
-      expect((decoded!.payload as UserPayload).username).toBe('john_doe');
+      expect(decoded.header.alg).toBe('HS256');
+      expect(decoded.signature).toEqual(expect.any(String));
+      expect((decoded.payload as UserPayload).username).toBe('john_doe');
+
+      expectTypeOf(
+        jwtService.decode(validToken, { complete: true })
+      ).toEqualTypeOf<Omit<jwt.Jwt, 'payload'> & { payload: jwt.JwtPayload | string }>();
+      expectTypeOf(
+        jwtService.decode<UserPayload>(validToken, { complete: true })
+      ).toEqualTypeOf<Omit<jwt.Jwt, 'payload'> & { payload: UserPayload }>();
     });
 
     it('should return null when decoding invalid or malformed token', () => {
@@ -562,9 +570,10 @@ describe('JwtService', () => {
     });
 
     it('should pass options properly when provided to decode', () => {
-      const decoded = jwtService.decode(validToken, { json: true });
-      expect(decoded).toBeDefined();
-      expect(decoded.username).toBe('john_doe');
+      const decodeSpy = vi.spyOn(jsonwebtoken, 'decode');
+      jwtService.decode(validToken, { json: true });
+      expect(decodeSpy).toHaveBeenCalledWith(validToken, { json: true });
+      decodeSpy.mockRestore();
     });
   });
 });

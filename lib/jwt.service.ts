@@ -163,23 +163,23 @@ export class JwtService {
     );
   }
 
-  decode(
+  decode<T = jwt.JwtPayload | string>(
     token: string,
     options: jwt.DecodeOptions & { complete: true }
-  ): jwt.Jwt | null;
+  ): Omit<jwt.Jwt, 'payload'> & { payload: T };
   decode<T = any>(
     token: string,
     options?: jwt.DecodeOptions & { complete?: false }
-  ): T | null;
+  ): T;
   decode<T = any>(
     token: string,
     options?: jwt.DecodeOptions
-  ): T | jwt.Jwt | null;
-  decode<T = any>(
+  ): T;
+  decode(
     token: string,
     options?: jwt.DecodeOptions
-  ): T | jwt.Jwt | null {
-    return jsonwebtoken.decode(token, options) as T | jwt.Jwt | null;
+  ): any {
+    return jsonwebtoken.decode(token, options) as any;
   }
 
   private mergeJwtOptions(
