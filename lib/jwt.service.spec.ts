@@ -3,6 +3,7 @@ import {
   describe,
   it,
   expect,
+  expectTypeOf,
   beforeEach,
   afterEach,
   beforeAll,
@@ -518,6 +519,61 @@ describe('JwtService', () => {
 
       // @ts-expect-error as the username property is not defined in the payload
       await jwtService.signAsync<UserPayload>(invalidPayload);
+    });
+  });
+
+  describe('decode', () => {
+    let jwtService: JwtService;
+    let validToken: string;
+
+    interface UserPayload {
+      id: number;
+      username: string;
+    }
+
+    beforeAll(async () => {
+      jwtService = await setup(config);
+      validToken = jsonwebtoken.sign(
+        { id: 101, username: 'john_doe' },
+        'default_secret'
+      );
+    });
+
+    it('should decode token payload without complete option', () => {
+      const decoded = jwtService.decode<UserPayload>(validToken);
+      expect(decoded).not.toBeNull();
+      expect(decoded.id).toBe(101);
+      expect(decoded.username).toBe('john_doe');
+
+      expectTypeOf(jwtService.decode<UserPayload>(validToken)).toEqualTypeOf<UserPayload>();
+      expectTypeOf(jwtService.decode(validToken)).toBeAny();
+    });
+
+    it('should return complete decoded object with header, payload, and signature when complete: true', () => {
+      const decoded = jwtService.decode(validToken, { complete: true });
+      expect(decoded).not.toBeNull();
+      expect(decoded.header.alg).toBe('HS256');
+      expect(decoded.signature).toEqual(expect.any(String));
+      expect((decoded.payload as UserPayload).username).toBe('john_doe');
+
+      expectTypeOf(
+        jwtService.decode(validToken, { complete: true })
+      ).toEqualTypeOf<Omit<jwt.Jwt, 'payload'> & { payload: jwt.JwtPayload | string }>();
+      expectTypeOf(
+        jwtService.decode<UserPayload>(validToken, { complete: true })
+      ).toEqualTypeOf<Omit<jwt.Jwt, 'payload'> & { payload: UserPayload }>();
+    });
+
+    it('should return null when decoding invalid or malformed token', () => {
+      const decoded = jwtService.decode('invalid.token.here');
+      expect(decoded).toBeNull();
+    });
+
+    it('should pass options properly when provided to decode', () => {
+      const decodeSpy = vi.spyOn(jsonwebtoken, 'decode');
+      jwtService.decode(validToken, { json: true });
+      expect(decodeSpy).toHaveBeenCalledWith(validToken, { json: true });
+      decodeSpy.mockRestore();
     });
   });
 });

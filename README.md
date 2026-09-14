@@ -168,7 +168,8 @@ NOTE: Will throw an exception for asynchronous version of `secretOrKeyProvider`;
 
 The asynchronous `.verify()` method.
 
-#### jwtService.decode(token: string, options: DecodeOptions): object | string
+#### jwtService.decode<T = any>(token: string, options?: DecodeOptions): T
+#### jwtService.decode<T = jwt.JwtPayload | string>(token: string, options: DecodeOptions & { complete: true }): Omit<jwt.Jwt, 'payload'> & { payload: T }
 
 The decode method is an implementation of jsonwebtoken `.decode()`.
 

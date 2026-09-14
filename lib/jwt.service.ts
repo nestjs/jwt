@@ -163,8 +163,23 @@ export class JwtService {
     );
   }
 
-  decode<T = any>(token: string, options?: jwt.DecodeOptions): T {
-    return jsonwebtoken.decode(token, options) as T;
+  decode<T = jwt.JwtPayload | string>(
+    token: string,
+    options: jwt.DecodeOptions & { complete: true }
+  ): Omit<jwt.Jwt, 'payload'> & { payload: T };
+  decode<T = any>(
+    token: string,
+    options?: jwt.DecodeOptions & { complete?: false }
+  ): T;
+  decode<T = any>(
+    token: string,
+    options?: jwt.DecodeOptions
+  ): T;
+  decode(
+    token: string,
+    options?: jwt.DecodeOptions
+  ): any {
+    return jsonwebtoken.decode(token, options) as any;
   }
 
   private mergeJwtOptions(
