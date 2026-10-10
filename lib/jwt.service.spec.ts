@@ -102,6 +102,28 @@ describe('JwtService', () => {
     });
   });
 
+  describe('should reject when async config.secretOrKeyProvider rejects', () => {
+    let jwtService: JwtService;
+    const testPayload: string = getRandomString();
+
+    beforeAll(async () => {
+      jwtService = await setup({
+        ...config,
+        secretOrKeyProvider: () => Promise.reject(new Error('no key'))
+      });
+    });
+
+    it('signing (async) should reject', async () => {
+      await expect(jwtService.signAsync(testPayload)).rejects.toThrow('no key');
+    });
+
+    it('verifying (async) should reject', async () => {
+      await expect(jwtService.verifyAsync(testPayload)).rejects.toThrow(
+        'no key'
+      );
+    });
+  });
+
   describe('should use config.secret', () => {
     let jwtService: JwtService;
     const testPayload: string = getRandomString();
