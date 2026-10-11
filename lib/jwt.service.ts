@@ -95,6 +95,9 @@ export class JwtService {
       typeof payload === 'string' &&
       signOptKeys.some((k) => !allowedSignOptKeys.includes(k))
     ) {
+      if (secret instanceof Promise) {
+        secret.catch(() => {}); // suppress rejection from async provider
+      }
       throw new Error(
         'Payload as string is not allowed with the following sign options: ' +
           signOptKeys.join(', ')
