@@ -112,6 +112,7 @@ export class JwtService {
             err ? reject(err) : resolve(encoded)
           );
         })
+        .catch(reject)
     );
   }
 
