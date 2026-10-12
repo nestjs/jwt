@@ -484,6 +484,34 @@ describe('JwtService', () => {
     });
   });
 
+  describe('should not leave async config.secretOrKeyProvider rejection unhandled', () => {
+    let jwtService: JwtService;
+    const testPayloadStr: string = getRandomString();
+
+    beforeAll(async () => {
+      jwtService = await setup({
+        secretOrKeyProvider: () => Promise.reject(new Error('no key'))
+      });
+    });
+
+    it('should "signAsync" expect errors with a "payload" string with "expiresIn"', async () => {
+      const onUnhandledRejection = vi.fn();
+      process.on('unhandledRejection', onUnhandledRejection);
+      try {
+        expect(() =>
+          // @ts-expect-error
+          jwtService.signAsync(testPayloadStr, { expiresIn: 60 })
+        ).toThrow(
+          'Payload as string is not allowed with the following sign options: expiresIn'
+        );
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(onUnhandledRejection).not.toHaveBeenCalled();
+      } finally {
+        process.off('unhandledRejection', onUnhandledRejection);
+      }
+    });
+  });
+
   describe('should properly handle generic types', () => {
     let jwtService: JwtService;
 
