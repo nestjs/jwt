@@ -50,7 +50,7 @@ export interface JwtModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
  * @publicApi
  */
 export interface JwtSignOptions extends jwt.SignOptions {
-  secret?: string | Buffer;
+  secret?: jwt.Secret;
   privateKey?: jwt.Secret;
 }
 
@@ -58,8 +58,8 @@ export interface JwtSignOptions extends jwt.SignOptions {
  * @publicApi
  */
 export interface JwtVerifyOptions extends jwt.VerifyOptions {
-  secret?: string | Buffer;
-  publicKey?: string | Buffer;
+  secret?: jwt.Secret;
+  publicKey?: jwt.Secret;
 }
 
 export type GetSecretKeyResult = string | Buffer | jwt.Secret;

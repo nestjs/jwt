@@ -232,6 +232,49 @@ describe('JwtService', () => {
     });
   });
 
+  describe('should allow KeyObject for secret, privateKey and publicKey in options', () => {
+    const { privateKey, publicKey } = generateKeyPairSync('rsa', {
+      modulusLength: 2048,
+      publicKeyEncoding: { type: 'spki', format: 'pem' },
+      privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+    });
+    const privKeyAsObject: KeyObject = createPrivateKey(privateKey);
+    const pubKeyAsObject: KeyObject = createPublicKey(publicKey);
+    const secretAsObject: KeyObject = createSecretKey(
+      Buffer.from('the secret key')
+    );
+    const testPayload = { foo: 'bar' };
+
+    let jwtService: JwtService;
+
+    beforeEach(async () => {
+      jwtService = await setup({});
+      verifySpy.mockRestore();
+      signSpy.mockRestore();
+    });
+
+    it('verifying should work with privateKey and publicKey', () => {
+      const token = jwtService.sign(testPayload, {
+        privateKey: privKeyAsObject,
+        algorithm: 'RS256'
+      });
+
+      expect(
+        jwtService.verify(token, { publicKey: pubKeyAsObject })
+      ).toHaveProperty('foo', 'bar');
+    });
+
+    it('verifying (async) should work with secret', async () => {
+      const token = await jwtService.signAsync(testPayload, {
+        secret: secretAsObject
+      });
+
+      await expect(
+        jwtService.verifyAsync(token, { secret: secretAsObject })
+      ).resolves.toHaveProperty('foo', 'bar');
+    });
+  });
+
   describe('should use config.secretOrPrivateKey but warn about deprecation', () => {
     let jwtService: JwtService;
     let consoleWarnSpy: MockInstance;
