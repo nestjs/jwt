@@ -221,11 +221,10 @@ export class JwtService {
     const secret = this.options.secretOrKeyProvider
       ? this.options.secretOrKeyProvider(secretRequestType, token, options)
       : options?.secret ||
-        this.options.secret ||
         (key === 'privateKey'
-          ? (options as JwtSignOptions)?.privateKey || this.options.privateKey
-          : (options as JwtVerifyOptions)?.publicKey ||
-            this.options.publicKey) ||
+          ? (options as JwtSignOptions)?.privateKey
+          : (options as JwtVerifyOptions)?.publicKey) ||
+        this.options.secret ||
         this.options[key];
 
     return secret instanceof Promise

@@ -454,6 +454,43 @@ describe('JwtService', () => {
     });
   });
 
+  describe('should prioritize private/public key from options over config.secret', () => {
+    let jwtService: JwtService;
+    const testPayload: string = getRandomString();
+    const privateKey = 'customPrivateKey';
+    const publicKey = 'customPublicKey';
+
+    beforeAll(async () => {
+      jwtService = await setup({
+        secret: 'default_secret'
+      });
+    });
+
+    it('signing prioritizes options.privateKey over config.secret', () => {
+      expect(jwtService.sign(testPayload, { privateKey })).toBe(
+        `signed_${testPayload}_by_customPrivateKey`
+      );
+    });
+
+    it('signing (async) prioritizes options.privateKey over config.secret', async () => {
+      await expect(
+        jwtService.signAsync(testPayload, { privateKey })
+      ).resolves.toBe(`signed_${testPayload}_by_customPrivateKey`);
+    });
+
+    it('verifying prioritizes options.publicKey over config.secret', () => {
+      expect(jwtService.verify(testPayload, { publicKey })).toBe(
+        `verified_${testPayload}_by_customPublicKey`
+      );
+    });
+
+    it('verifying (async) prioritizes options.publicKey over config.secret', async () => {
+      await expect(
+        jwtService.verifyAsync(testPayload, { publicKey })
+      ).resolves.toBe(`verified_${testPayload}_by_customPublicKey`);
+    });
+  });
+
   describe('should not use invalid sign options', () => {
     let jwtService: JwtService;
     const testPayloadStr: string = getRandomString();
@@ -638,7 +675,9 @@ describe('JwtService', () => {
       expect(decoded.id).toBe(101);
       expect(decoded.username).toBe('john_doe');
 
-      expectTypeOf(jwtService.decode<UserPayload>(validToken)).toEqualTypeOf<UserPayload>();
+      expectTypeOf(
+        jwtService.decode<UserPayload>(validToken)
+      ).toEqualTypeOf<UserPayload>();
       expectTypeOf(jwtService.decode(validToken)).toBeAny();
     });
 
@@ -651,7 +690,9 @@ describe('JwtService', () => {
 
       expectTypeOf(
         jwtService.decode(validToken, { complete: true })
-      ).toEqualTypeOf<Omit<jwt.Jwt, 'payload'> & { payload: jwt.JwtPayload | string }>();
+      ).toEqualTypeOf<
+        Omit<jwt.Jwt, 'payload'> & { payload: jwt.JwtPayload | string }
+      >();
       expectTypeOf(
         jwtService.decode<UserPayload>(validToken, { complete: true })
       ).toEqualTypeOf<Omit<jwt.Jwt, 'payload'> & { payload: UserPayload }>();
