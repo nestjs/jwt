@@ -1,6 +1,6 @@
 {
   "name": "@nestjs/jwt",
-  "version": "12.0.4",
+  "version": "12.0.5",
   "type": "module",
   "description": "Sign and verify JSON Web Tokens in NestJS with an injectable JwtService, built on jsonwebtoken.",
   "keywords": [
