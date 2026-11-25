@@ -564,6 +564,36 @@ describe('JwtService', () => {
     });
   });
 
+  describe('should allow sign options that are valid for a string payload', () => {
+    let jwtService: JwtService;
+    const testPayloadStr: string = getRandomString();
+
+    beforeAll(async () => {
+      jwtService = await setup({
+        secret: 'secret',
+        signOptions: { algorithm: 'HS512', keyid: 'key-1' }
+      });
+    });
+
+    it('should "sign" a "payload" string with "algorithm" and "keyid" sign options', () => {
+      expect(jwtService.sign(testPayloadStr)).toBe(
+        `signed_${testPayloadStr}_by_secret`
+      );
+    });
+
+    it('should "sign" a "payload" string with an "algorithm" sign option', () => {
+      expect(jwtService.sign(testPayloadStr, { algorithm: 'HS256' })).toBe(
+        `signed_${testPayloadStr}_by_secret`
+      );
+    });
+
+    it('should "signAsync" a "payload" string with "algorithm" and "keyid" sign options', async () => {
+      await expect(jwtService.signAsync(testPayloadStr)).resolves.toBe(
+        `signed_${testPayloadStr}_by_secret`
+      );
+    });
+  });
+
   describe('should not leave async config.secretOrKeyProvider rejection unhandled', () => {
     let jwtService: JwtService;
     const testPayloadStr: string = getRandomString();
