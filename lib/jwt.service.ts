@@ -11,6 +11,19 @@ import {
 import { JWT_MODULE_OPTIONS } from './jwt.constants.js';
 import { WrongSecretProviderError } from './jwt.errors.js';
 
+// Sign options that "jsonwebtoken" only accepts for an object payload
+const OBJECT_PAYLOAD_SIGN_OPTIONS = [
+  'expiresIn',
+  'notBefore',
+  'noTimestamp',
+  'audience',
+  'issuer',
+  'subject',
+  'jwtid'
+] as const;
+
+type ObjectPayloadSignOption = (typeof OBJECT_PAYLOAD_SIGN_OPTIONS)[number];
+
 /**
  * @publicApi
  */
@@ -26,7 +39,7 @@ export class JwtService {
 
   sign(
     payload: string,
-    options?: Omit<JwtSignOptions, keyof jwt.SignOptions>
+    options?: Omit<JwtSignOptions, ObjectPayloadSignOption>
   ): string;
   sign(payload: Buffer, options?: JwtSignOptions): string;
   sign<T extends object = any>(payload: T, options?: JwtSignOptions): string;
@@ -50,12 +63,8 @@ export class JwtService {
       throw new WrongSecretProviderError();
     }
 
-    const allowedSignOptKeys = ['secret', 'privateKey'];
-    const signOptKeys = Object.keys(signOptions);
-    if (
-      typeof payload === 'string' &&
-      signOptKeys.some((k) => !allowedSignOptKeys.includes(k))
-    ) {
+    const signOptKeys = this.getObjectPayloadSignOptKeys(signOptions);
+    if (typeof payload === 'string' && signOptKeys.length > 0) {
       throw new Error(
         'Payload as string is not allowed with the following sign options: ' +
           signOptKeys.join(', ')
@@ -67,7 +76,7 @@ export class JwtService {
 
   signAsync(
     payload: string,
-    options?: Omit<JwtSignOptions, keyof jwt.SignOptions>
+    options?: Omit<JwtSignOptions, ObjectPayloadSignOption>
   ): Promise<string>;
   signAsync(payload: Buffer, options?: JwtSignOptions): Promise<string>;
   signAsync<T extends object = any>(
@@ -89,12 +98,8 @@ export class JwtService {
       JwtSecretRequestType.SIGN
     );
 
-    const allowedSignOptKeys = ['secret', 'privateKey'];
-    const signOptKeys = Object.keys(signOptions);
-    if (
-      typeof payload === 'string' &&
-      signOptKeys.some((k) => !allowedSignOptKeys.includes(k))
-    ) {
+    const signOptKeys = this.getObjectPayloadSignOptKeys(signOptions);
+    if (typeof payload === 'string' && signOptKeys.length > 0) {
       if (secret instanceof Promise) {
         secret.catch(() => {}); // suppress rejection from async provider
       }
@@ -184,6 +189,12 @@ export class JwtService {
     options?: jwt.DecodeOptions
   ): any {
     return jsonwebtoken.decode(token, options) as any;
+  }
+
+  private getObjectPayloadSignOptKeys(signOptions: jwt.SignOptions): string[] {
+    return Object.keys(signOptions).filter((k) =>
+      OBJECT_PAYLOAD_SIGN_OPTIONS.includes(k as ObjectPayloadSignOption)
+    );
   }
 
   private mergeJwtOptions(
